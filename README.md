@@ -1,1 +1,2 @@
 # adventofcode
+Fill in the session cookie in secret.py, as session='cookieid'. Find the session cookie id in Firefox by logging in to advent of code, then opening the inspector tools by pressing shift + F9 and find the session cookie under Cookies.
