@@ -45,10 +45,10 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
     res2 = p2_fn(v)
     print('part_1: {}'.format(res1))
     print('part_2: {}'.format(res2))
-    if 1 in cmds:
+    if 'submit1' in cmds:
         answer(YEAR, DAY, 1, res1)
         
-    if 2 in cmds:
+    if 'submit2' in cmds:
         answer(YEAR, DAY, 2, res2)
         
 

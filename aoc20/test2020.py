@@ -91,5 +91,8 @@ if __name__ == '__main__':
     
     y = 2016
     day = 1
-    cmds = {S, 2}
+    cmds = {S, 
+    #'submit1',
+    'submit2' 
+    }
     run(y, day, p1, p2, cmds)
