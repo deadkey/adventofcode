@@ -1,10 +1,12 @@
+import requests
+from secret import session
 import os, glob, time
+
 def log(s):
     print('Fetch: {}'.format(s))
 
 def dl(fname, day, year):
-    import requests
-    from secret import session
+    
     jar = requests.cookies.RequestsCookieJar()
     jar.set('session', session)
     url = 'https://adventofcode.com/{}/day/{}/input'.format(year, day)
@@ -56,3 +58,21 @@ def get_samples(year, day):
         samples.append((fname, inp))
     return samples
 
+
+def answer(year, day, level, res):
+    print("You are about to submit {} to part {} day {}, year {}".format(res, level, day, year))
+    print("Are you sure? (y)es/(n)o")
+    ans = input()
+    if ans == 'y' or ans == 'yes':
+        return submit(year, day, level, res)
+
+def submit(year, day, level, result):
+    jar = requests.cookies.RequestsCookieJar()
+    jar.set('session', session)
+    url = 'https://adventofcode.com/{}/day/{}/answer'.format(year, day)
+    data = {b"answer" : (str(result)).encode('utf-8'), b'level' : str(level).encode('utf-8')}
+    r = requests.post(url, data = data, cookies=jar)
+    WA = "That's not the right answer"
+    TOO_SOON = "You gave an answer too recently"
+    AC = "That"
+    return (not (WA in r.text or TOO_SOON in r.text), r.text)

@@ -2,7 +2,7 @@ import argparse
 import sys, time
 from datetime import datetime
 sys.path.extend(['..', '.'])
-from fetch import fetch, get_samples
+from fetch import fetch, get_samples, answer
 import logging as log
 
 def get_args():
@@ -23,9 +23,10 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
     run_samples = "input only" not in cmds and "run samples" in cmds
     if run_samples:
         for fname, data in sorted(get_samples(YEAR, DAY)):
-            print(fname)
-            print("Sample part 1: {}".format(p1_fn(data)))
-            print("Sample part 2: {}".format(p2_fn(data)))
+            if len(data) > 0:
+                print(fname)
+                print("Sample part 1: {}".format(p1_fn(data)))
+                print("Sample part 2: {}".format(p2_fn(data)))
     
     target = get_target(YEAR, DAY, fake=fake_time)
     fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
@@ -38,10 +39,27 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
     if "samples only" in cmds:
         return
     v = fetch(YEAR, DAY, log, wait_until=target, force=force)
-    if "debug" in cmds:
+    if "print input" in cmds:
         print(v)
-    print('part_1: {}'.format(p1_fn(v)))
-    print('part_2: {}'.format(p2_fn(v)))
+    res1 = p1_fn(v)
+    res2 = p2_fn(v)
+    print('part_1: {}'.format(res1))
+    print('part_2: {}'.format(res2))
+    if 1 in cmds:
+        ok, hint = answer(YEAR, DAY, 1, res1)
+        if ok:
+            print("Correct")
+        else:
+            print("Not correct")
+            print(hint)
+    if 2 in cmds:
+        ok, hint = answer(YEAR, DAY, 2, res2)
+        if ok:
+            print("Correct")
+        else:
+            print("Not correct")
+            print(hint)
+    
 
 
 
