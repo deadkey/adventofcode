@@ -30,7 +30,7 @@ PR = "print input"
 
 if __name__ == '__main__':
     cmds = {S, 
-    #'submit1',
+    'submit1',
     #'submit2' 
     }
     run(get_year(), get_day(), p1, p2, cmds)
