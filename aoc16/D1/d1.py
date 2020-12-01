@@ -2,8 +2,7 @@ import sys, time
 from datetime import date
 sys.path.extend(['..', '.'])
 from collections import *
-from main import run
-from fetch import answer
+from util import run
 
 def get_day(): return date.today().day
 def get_year(): return date.today().year
@@ -88,7 +87,7 @@ tosubmit = 1
 if __name__ == '__main__':
     
     y = 2016
-    day = 2
+    day = 1
     cmds = {S, 
     #'submit1',
     #'submit2' 

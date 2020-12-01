@@ -1,10 +1,10 @@
 import requests
 from secret import session
 import os, glob, time
+from datetime import datetime
+import logging as log
 import bs4
 
-def log(s):
-    print('Fetch: {}'.format(s))
 
 def dl(fname, day, year):
     
@@ -13,13 +13,13 @@ def dl(fname, day, year):
     url = 'https://adventofcode.com/{}/day/{}/input'.format(year, day)
     r = requests.get(url, cookies=jar)
     if 'Puzzle inputs' in r.text:
-        log('Session cookie expired?')
+        log.w('Session cookie expired?')
         return r.text
     if "Please don't repeatedly request this endpoint before it unlocks!" in r.text:
-        log('Output not available yet')
+        log.w('Output not available yet')
         return r.text
     if r.status_code != 200:
-        log('Not 200 as status code')
+        log.w('Not 200 as status code')
         return r.text
     with open(fname,'w') as f:
         f.write(r.text)
@@ -49,12 +49,9 @@ def fetch(year, day, log, force=False, wait_until=-1):
     return open(filename, 'r').read().strip('\n')
 
 
-def get_samples(year, day):
-    d = 'samples/{}_{}'.format(year,day)
-    mkdirs('samples')
-    mkdirs(d)
+def get_samples(day):
     samples = []
-    for fname in glob.glob('{}/*.in'.format(d)):
+    for fname in glob.glob('*.in'.format(day)):
         inp = open(fname, 'r').read().strip('\n')
         samples.append((fname, inp))
     return samples
@@ -65,9 +62,9 @@ def answer(year, day, level, res):
     print("Are you sure? (y)es/(n)o")
     ans = input()
     if ans == 'y' or ans == 'yes':
-        print('Submitting {}'.format(answer))
+        print('Submitting {}'.format(res))
         text = submit(year, day, level, res)
-        if "That's the correct answer" in text:
+        if "That's the right answer" in text:
             print('AC!')
         else:
             print('WRONG!')
@@ -88,3 +85,46 @@ def submit(year, day, level, result):
     html = bs4.BeautifulSoup(r.text, 'html.parser')
     return html.find('article').text
 
+
+
+def get_target(YEAR, DAY, fake=False):
+    epoch = datetime(1970, 1, 1)
+    target = datetime(YEAR, 12, DAY, 5, 0, 0, 100)
+    if fake:
+        return time.time() + 10
+    return (target - epoch).total_seconds()
+
+def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
+    fake_time = "fake time" in cmds
+    force = "force fetch" in cmds
+    run_samples = "input only" not in cmds and "run samples" in cmds
+    if run_samples:
+        for fname, data in sorted(get_samples(DAY)):
+            if len(data) > 0:
+                print(fname)
+                print("Sample part 1: {}".format(p1_fn(data)))
+                print("Sample part 2: {}".format(p2_fn(data)))
+    
+    target = get_target(YEAR, DAY, fake=fake_time)
+    fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
+    log.basicConfig(level=log.DEBUG, format=fmt_str)
+    now = time.time()
+    left = target - now
+    if left > 0:
+        log.debug("Target: {} Now: {}".format(target, now))
+        log.debug("Seconds Left: {}".format(left))
+    if "samples only" in cmds:
+        return
+    v = fetch(YEAR, DAY, log, wait_until=target, force=force)
+    if "print input" in cmds:
+        print(v)
+    res1 = p1_fn(v)
+    res2 = p2_fn(v)
+    print('part_1: {}'.format(res1))
+    print('part_2: {}'.format(res2))
+    if 'submit1' in cmds:
+        answer(YEAR, DAY, 1, res1)
+        
+    if 'submit2' in cmds:
+        answer(YEAR, DAY, 2, res2)
+        
