@@ -1,6 +1,7 @@
 import requests
 from secret import session
 import os, glob, time
+import bs4
 
 def log(s):
     print('Fetch: {}'.format(s))
@@ -64,7 +65,16 @@ def answer(year, day, level, res):
     print("Are you sure? (y)es/(n)o")
     ans = input()
     if ans == 'y' or ans == 'yes':
-        return submit(year, day, level, res)
+        print('Submitting {}'.format(answer))
+        text = submit(year, day, level, res)
+        if "That's the correct answer" in text:
+            print('AC!')
+        else:
+            print('WRONG!')
+        print('>> ' + text)
+        return text
+    else:
+        print('Skipping submit')
 
 def submit(year, day, level, result):
     jar = requests.cookies.RequestsCookieJar()
@@ -72,7 +82,9 @@ def submit(year, day, level, result):
     url = 'https://adventofcode.com/{}/day/{}/answer'.format(year, day)
     data = {b"answer" : (str(result)).encode('utf-8'), b'level' : str(level).encode('utf-8')}
     r = requests.post(url, data = data, cookies=jar)
-    WA = "That's not the right answer"
-    TOO_SOON = "You gave an answer too recently"
-    AC = "That"
-    return (not (WA in r.text or TOO_SOON in r.text), r.text)
+    if not r.status_code == 200:
+        return 'StatusCode: {}\n{}'.format(r.status_code, r.text)
+    
+    html = bs4.BeautifulSoup(r.text, 'html.parser')
+    return html.find('article').text
+

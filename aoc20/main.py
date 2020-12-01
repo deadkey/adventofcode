@@ -46,20 +46,11 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
     print('part_1: {}'.format(res1))
     print('part_2: {}'.format(res2))
     if 1 in cmds:
-        ok, hint = answer(YEAR, DAY, 1, res1)
-        if ok:
-            print("Correct")
-        else:
-            print("Not correct")
-            print(hint)
+        answer(YEAR, DAY, 1, res1)
+        
     if 2 in cmds:
-        ok, hint = answer(YEAR, DAY, 2, res2)
-        if ok:
-            print("Correct")
-        else:
-            print("Not correct")
-            print(hint)
-    
+        answer(YEAR, DAY, 2, res2)
+        
 
 
 
