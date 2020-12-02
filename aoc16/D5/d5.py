@@ -2,22 +2,16 @@ import sys, time
 from datetime import date
 sys.path.extend(['..', '.'])
 from collections import *
-from fetch import run, run_samples
-from util import multisplit, lazy_ints
-#lo, hi, lt, pw = lazy_ints(multisplit(line, '-: '))
-#or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
-import re
-#use regex re.split(' |,|: ', line)
+from util import run
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 5
+def get_year(): return 2016
 def db(a):
     if DB: print(a)
 
 def p1(v):
     lines = v.strip().split('\n')
-    print('Len input: {} lines {} chars'.format(len(lines), len(v)))
-
+        
     return 0
 
 def p2(v):
@@ -39,5 +33,4 @@ if __name__ == '__main__':
     #'submit1',
     #'submit2' 
     }
-    run_samples(p1, p2)
     run(get_year(), get_day(), p1, p2, cmds)
