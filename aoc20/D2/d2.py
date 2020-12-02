@@ -2,7 +2,10 @@ import sys, time
 from datetime import date
 sys.path.extend(['..', '.'])
 from collections import *
-from util import run
+from fetch import run, run_samples
+from util import multisplit, lazy_ints
+
+import re
 
 def get_day(): return date.today().day
 def get_year(): return date.today().year
@@ -11,13 +14,34 @@ def db(a):
 
 def p1(v):
     lines = v.strip().split('\n')
-        
-    return 0
+    print('Len input: {} lines {} chars'.format(len(lines), len(v)))
+    
+    cnt = 0
+    for line in lines:
+        lo, hi, lt, pw = lazy_ints(multisplit(line, '-: '))
+
+        ltcnt = 0
+        for ch in pw:
+            if ch == lt:
+                ltcnt += 1
+        if lo <= ltcnt <= hi:
+            cnt += 1
+    
+    return cnt
 
 def p2(v):
     lines = v.strip().split('\n')
+    cnt = 0
+    for line in lines:
+        lo, hi, lt, pw = re.split('-| |: ', line)
+        lo = int(lo)
+        hi = int(hi)
+        ltcnt = 0
+        if int(pw[lo-1] == lt) + int(pw[hi-1] == lt) == 1:
+            cnt += 1
     
-    return 0
+    return cnt
+
 
 
 S = "run samples"
@@ -29,8 +53,9 @@ PR = "print input"
 
 
 if __name__ == '__main__':
-    cmds = {S, 
-    'submit1',
+    cmds = {S,
+    #'submit1',
     #'submit2' 
     }
+    run_samples(p1, p2)
     run(get_year(), get_day(), p1, p2, cmds)
