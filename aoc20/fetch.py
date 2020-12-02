@@ -31,8 +31,7 @@ def mkdirs(f):
 
 
 def fetch(year, day, log, force=False, wait_until=-1):
-    filename = 'cache/{}-{}.in'.format(year, day)
-    mkdirs('cache')
+    filename = 'real.txt'
     exists = os.path.isfile(filename)
     if not exists or force:
         if wait_until != -1:

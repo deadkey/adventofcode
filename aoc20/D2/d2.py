@@ -42,7 +42,12 @@ def p2(v):
     
     return cnt
 
-
+def manual():
+    v = open("real.txt", 'r').read().strip('\n')
+    res1 = p1(v)
+    res2 = p2(v)
+    print('part_1: {}'.format(res1))
+    print('part_2: {}'.format(res2))
 
 S = "run samples"
 SO = "samples only"
@@ -53,9 +58,11 @@ PR = "print input"
 
 
 if __name__ == '__main__':
+    
     cmds = {S,
     #'submit1',
     #'submit2' 
     }
-    run_samples(p1, p2)
-    run(get_year(), get_day(), p1, p2, cmds)
+    #run_samples(p1, p2)
+    #run(get_year(), get_day(), p1, p2, cmds)
+    #manual()

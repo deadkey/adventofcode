@@ -26,6 +26,13 @@ def p2(v):
     return 0
 
 
+def manual():
+    v = open("real.txt", 'r').read().strip('\n')
+    res1 = p1(v)
+    res2 = p2(v)
+    print('part_1: {}'.format(res1))
+    print('part_2: {}'.format(res2))
+
 S = "run samples"
 SO = "samples only"
 IO = "input only"
@@ -41,3 +48,4 @@ if __name__ == '__main__':
     }
     run_samples(p1, p2)
     run(get_year(), get_day(), p1, p2, cmds)
+    #manual()
