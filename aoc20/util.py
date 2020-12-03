@@ -17,6 +17,33 @@ def int_convert(s):
         return int(s)
     return s
 
+INF = 10**30
+def togrid(lines): 
+    grid = [list(line) for line in lines]
+    return grid, len(grid), len(grid[0])
+
+def tointgrid(lines): 
+    grid = [list(map(int, line.split())) for line in lines]
+    return grid, len(grid), len(grid[0])
+    
+
+def get4nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
+    diff = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+    nb = []
+    for dr, dc in diff:
+        if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
+            nb.append((r+dr, c + dc))
+    return nb     
+
+def get8nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
+    diff = [(-1, 0), (1, 0), (0, 1), (0, -1), (-1, -1), (1, -1), (-1, 1), (1, 1)]
+    nb = []
+    for dr, dc in diff:
+        if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
+            nb.append((r+dr, c + dc))
+    return nb     
+
+
 
 def multisplit(s, schars):
     out = []

@@ -19,50 +19,19 @@ def p1(v):
     grid = []
     for line in lines:
         grid.append(list(line))
-    cnt = 0
-    r = 0
-    c = 0
-    for row in range(1, len(grid)):
-        i = c + 3
-        i %= len(grid[0])
-        ch = grid[row][i]
-        c = i
-        if ch == '#':
-            cnt += 1
-    return cnt
-
-def slope(v, dc, dr):
-    lines = v.strip().split('\n')
-    grid = []
-    for line in lines:
-        grid.append(list(line))
-    cnt = 0
-    r = 0
-    c = 0
-    for row in range(dr, len(grid), dr):
-        i = c + dc
-        i %= len(grid[0])
-        ch = grid[row][i]
-        c = i
-        if ch == '#':
-            cnt += 1
-    return cnt
+        #print(grid)
+        #vals = lazy_ints(multisplit(line, ' '))
+        #print(vals)
+    return 0
 
 def p2(v):
-    slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
-    res = []
-    for dc, dr in slopes:
-        r = slope(v, dc, dr)
-        db(r)
-        res.append(r)
-    cnt = 1
-    for r in res:
-        cnt *= r
-    return cnt
+    lines = v.strip().split('\n')
+    
+    return 0
 
 
 def manual():
-    v = open("1.in", 'r').read().strip('\n')
+    v = open("real.txt", 'r').read().strip('\n')
     res1 = p1(v)
     res2 = p2(v)
     print('part_1: {}'.format(res1))
@@ -100,8 +69,6 @@ def get_args():
         if arg == 'p2' or arg == 'part2':
             cmds.append('p2')
         
-
-
 
 if __name__ == '__main__':
     get_args()

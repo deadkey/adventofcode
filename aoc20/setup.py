@@ -14,6 +14,11 @@ def createfolders(DAY):
         with open("{}/d{}.py".format(dirname, DAY), "w+") as f:
             f.write(open("template.py").read())
         
+
+
 day = get_day()
+
+if len(sys.argv) > 1:
+    day = int(sys.argv[1])
 createfolders(day)
 
