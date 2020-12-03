@@ -4,62 +4,65 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-import hashlib
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: '))
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return 5# date.today().day
-def get_year(): return 2016# date.today().year
-def db(*a):
-    if DB: print(*a)
+def get_day(): return date.today().day
+def get_year(): return date.today().year
+def db(a):
+    if DB: print(a)
 
 def p1(v):
-    id = v.strip()
-    i = 1
-    pw = []
-    while True:
-        ha = id + str(i)
-        r = hashlib.md5(ha.encode()).hexdigest()
-        if r.startswith('00000'):
-            pw.append(r[5])
-            db(r[5],  len(pw))
-            if len(pw) == 8:
-                return ''.join(pw)
-        i += 1
+    lines = v.strip().split('\n')
+    grid = []
+    for line in lines:
+        grid.append(list(line))
+    cnt = 0
+    r = 0
+    c = 0
+    for row in range(1, len(grid)):
+        i = c + 3
+        i %= len(grid[0])
+        ch = grid[row][i]
+        c = i
+        if ch == '#':
+            cnt += 1
+    return cnt
 
-    return ''.join(pw)
+def slope(v, dc, dr):
+    lines = v.strip().split('\n')
+    grid = []
+    for line in lines:
+        grid.append(list(line))
+    cnt = 0
+    r = 0
+    c = 0
+    for row in range(dr, len(grid), dr):
+        i = c + dc
+        i %= len(grid[0])
+        ch = grid[row][i]
+        c = i
+        if ch == '#':
+            cnt += 1
+    return cnt
 
 def p2(v):
-    id = v.strip()
-    i = 1
-    pw = [''] * 8
-    used = set()
-    while True:
-        ha = id + str(i)
-        r = hashlib.md5(ha.encode()).hexdigest()
-        if r.startswith('00000'):
-            pos = int(r[5]) if r[5].isdigit() else -1
-
-            val = r[6]
-            if 0<= pos < 8 and pw[pos] == '':
-                pw[pos] = val
-                used.add(pos)
-                db(pos, val)
-            if len(used) == 8:
-                return ''.join(pw)
-        i += 1
-
-    return ''.join(pw)
-
-
-    return 0
-
+    slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
+    res = []
+    for dc, dr in slopes:
+        r = slope(v, dc, dr)
+        db(r)
+        res.append(r)
+    cnt = 1
+    for r in res:
+        cnt *= r
+    return cnt
 
 
 def manual():
-    v = open("real.txt", 'r').read().strip('\n')
+    v = open("1.in", 'r').read().strip('\n')
     res1 = p1(v)
     res2 = p2(v)
     print('part_1: {}'.format(res1))
@@ -98,9 +101,12 @@ def get_args():
             cmds.append('p2')
         
 
+
+
 if __name__ == '__main__':
     get_args()
-    if not io: run_samples(p1, p2, cmds)
+    
+    if not io: run_samples(p1, p2)
     if not so: run(get_year(),  get_day(), p1, p2, cmds)
     if stats: print_stats()
     #manual()

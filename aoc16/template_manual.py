@@ -25,12 +25,7 @@ def p2(v):
     return 0
 
 
-S = "run samples"
-SO = "samples only"
-IO = "input only"
-FF = "force fetch"
 DB = 1
-PR = "print input"
 
 
 if __name__ == '__main__':
