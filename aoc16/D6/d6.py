@@ -9,8 +9,8 @@ from util import *
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 6#date.today().day
+def get_year(): return 2016 #date.today().year
 def db(a):
     if DB: print(a)
 

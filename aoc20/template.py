@@ -73,7 +73,7 @@ def get_args():
 if __name__ == '__main__':
     get_args()
     
-    if not io: run_samples(p1, p2)
+    if not io: run_samples(p1, p2, cmds)
     if not so: run(get_year(),  get_day(), p1, p2, cmds)
     if stats: print_stats()
     #manual()
