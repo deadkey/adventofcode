@@ -30,7 +30,18 @@ def mkdirs(f):
     except: pass
 
 
-def fetch(year, day, log, force=False, wait_until=-1):
+def fetch(YEAR, DAY, cmds, wait_until=-1):
+    force = "force fetch" in cmds
+    
+    target = get_target(YEAR, DAY)
+    fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
+    log.basicConfig(level=log.DEBUG, format=fmt_str)
+    now = time.time()
+    left = target - now
+    if left > 0:
+        log.debug("Target: {} Now: {}".format(target, now))
+        log.debug("Seconds Left: {}".format(left))
+    
     filename = 'real.txt'
     exists = os.path.isfile(filename)
     if not exists or force:
@@ -41,10 +52,14 @@ def fetch(year, day, log, force=False, wait_until=-1):
                 time.sleep(min(to_sleep, 1))
                 to_sleep = wait_until - time.time()
 
-        out = dl(filename, day, year)
+        out = dl(filename, DAY, YEAR)
         if out != 0:
             return out
-    return open(filename, 'r').read().strip('\n')
+    v =  open(filename, 'r').read().strip('\n')
+    if "print input" in cmds:
+        print(v)
+    
+    return  v
 
 
 def get_samples():
@@ -96,33 +111,28 @@ def get_target(YEAR, DAY, fake=False):
 def run_samples(p1_fn, p2_fn):
     for fname, data in sorted(get_samples()):
         if len(data) > 0:
-            print(fname)
+            print('Running: {}'.format(fname))
             print("Sample part 1: {}".format(p1_fn(data)))
             print("Sample part 2: {}".format(p2_fn(data)))
-
+            print('##############################')
 
 def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
-    force = "force fetch" in cmds
+    v = fetch(YEAR,  DAY,cmds)
+    default = 'p1' not in cmds and 'p2' not in cmds
+    part1 = True if 'p1' in cmds or default else False
+    part2 = True if 'p2' in cmds or default else False
+    print('Running real input')
     
-    target = get_target(YEAR, DAY)
-    fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
-    log.basicConfig(level=log.DEBUG, format=fmt_str)
-    now = time.time()
-    left = target - now
-    if left > 0:
-        log.debug("Target: {} Now: {}".format(target, now))
-        log.debug("Seconds Left: {}".format(left))
- 
-    v = fetch(YEAR, DAY, log, wait_until=target, force=force)
-    if "print input" in cmds:
-        print(v)
-    res1 = p1_fn(v)
-    res2 = p2_fn(v)
+    res1 = p1_fn(v) if part1 else "Skipping"
+    res2 = p2_fn(v) if part2 else 'Skipping'
+        
+
     print('part_1: {}'.format(res1))
     print('part_2: {}'.format(res2))
-    if 'submit1' in cmds:
+        
+
+    if 'submit1' in cmds and part1:
         answer(YEAR, DAY, 1, res1)
-        
-    if 'submit2' in cmds:
-        answer(YEAR, DAY, 2, res2)
-        
+    if 'submit2' in cmds and part2:
+            answer(YEAR, DAY, 2, res2)
+            

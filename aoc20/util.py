@@ -34,3 +34,10 @@ def multisplit(s, schars):
     
 def lazy_ints(li):
     return list(map(int_convert, li)) 
+
+def print_stats():
+
+    v = open("real.txt", 'r').read().strip('\n')
+    lines = len(v.strip().split('\n'))
+    print('Len input: {} lines {} chars'.format(lines, len(v)))
+    
