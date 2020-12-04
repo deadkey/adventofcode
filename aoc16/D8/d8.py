@@ -9,19 +9,74 @@ from util import *
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 8 #date.today().day
+def get_year(): return 2016#date.today().year
 def db(*a):
     if DB: print(*a)
 
 def p1(v):
     lines = v.strip().split('\n')
+    grid = [[' '] * 50 for _ in range(6)]
+    for cmd in lines:
+        if cmd.startswith('rotate row'):
+            y, B = stripall(cmd)
+            
+            rotrow(y, B, grid)
+        if cmd.startswith('rotate column'):
+            y, B =stripall(cmd)
+            rotcol(y, B, grid)
+        if cmd.startswith('rect'):
+            A, B = stripall(cmd)
+            rect(A, B, grid)
+        
+        
+    cnt = 0
+    for r in range(len(grid)):
+        cnt += grid[r].count('#')
+    return cnt
+
+def rect(A, B, grid):
+    for r in range(B):
+        for c in range(A):
+            grid[r][c] = '#'
+
+
+def rotrow(r, B, grid):
+    orig = list(grid[r])
+    for i, ch in enumerate(orig):
+        ni = (i + B) % len(grid[0])
+        grid[r][ni] = ch
+
+def rotcol(c, B, grid):
+    orig = list(grid[r][c] for r in range(0, len(grid)))
+    for i, ch in enumerate(orig):
+        ni = (i + B) % len(grid)
+        grid[ni][c] = ch
+
+def stripall(s):
+    li = removeall(s, ['rotate row', 'rotate column', 'x=', 'y=', 'x', 'by', 'rect']).split()
+    return lazy_ints(li)
     
-    return 0
+
 
 def p2(v):
+ 
     lines = v.strip().split('\n')
-    
+    grid = [[' '] * 50 for _ in range(6)]
+    for cmd in lines:
+        if cmd.startswith('rotate row'):
+            y, B = stripall(cmd)
+            
+            rotrow(y, B, grid)
+        if cmd.startswith('rotate column'):
+            y, B =stripall(cmd)
+            rotcol(y, B, grid)
+        if cmd.startswith('rect'):
+            A, B = stripall(cmd)
+            rect(A, B, grid)
+        
+  
+    printgrid(grid)
     return 0
 
 

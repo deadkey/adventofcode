@@ -3,7 +3,6 @@ from secret import session
 import os, glob, time
 from datetime import datetime
 import bs4
-import logging as log
 
 def dl(fname, day, year):
     
@@ -12,13 +11,13 @@ def dl(fname, day, year):
     url = 'https://adventofcode.com/{}/day/{}/input'.format(year, day)
     r = requests.get(url, cookies=jar)
     if 'Puzzle inputs' in r.text:
-        log.w('Session cookie expired?')
+        print('Session cookie expired?')
         return r.text
     if "Please don't repeatedly request this endpoint before it unlocks!" in r.text:
-        log.w('Output not available yet')
+        print('Output not available yet')
         return r.text
     if r.status_code != 200:
-        log.w('Not 200 as status code')
+        print('Not 200 as status code')
         return r.text
     with open(fname,'w') as f:
         f.write(r.text)
@@ -30,28 +29,27 @@ def mkdirs(f):
     except: pass
 
 
-def fetch(YEAR, DAY, cmds, wait_until=-1):
+def fetch(YEAR, DAY, cmds):
     force = "force fetch" in cmds
     
     target = get_target(YEAR, DAY)
     fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
-    log.basicConfig(level=log.DEBUG, format=fmt_str)
     now = time.time()
     left = target - now
     if left > 0:
-        log.debug("Target: {} Now: {}".format(target, now))
-        log.debug("Seconds Left: {}".format(left))
+        print("Target: {} Now: {}".format(target, now))
+        print("Seconds Left: {}".format(left))
     
     filename = 'real.txt'
     exists = os.path.isfile(filename)
     if not exists or force:
-        if wait_until != -1:
-            to_sleep = wait_until - time.time()
-            while to_sleep > 0:
-                log.debug('Sleeping for {:.3f} s'.format(to_sleep))
-                time.sleep(min(to_sleep, 1))
-                to_sleep = wait_until - time.time()
-
+        
+        to_sleep = target - time.time()
+        while to_sleep > 0:
+            print('Sleeping for {:.3f} s'.format(to_sleep))
+            time.sleep(min(to_sleep, 1))
+            to_sleep = target - time.time()
+        
         out = dl(filename, DAY, YEAR)
         if out != 0:
             return out

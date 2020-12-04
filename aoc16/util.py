@@ -5,7 +5,7 @@ from datetime import datetime
 import bs4
 import logging as log
 
-def is_integer(i):
+def isint(i):
     try:
         int(i)
         return True
@@ -13,9 +13,41 @@ def is_integer(i):
         return False
 
 def int_convert(s):
-    if is_integer(s):
+    if isint(s):
         return int(s)
     return s
+
+INF = 10**30
+def togrid(lines): 
+    grid = [list(line) for line in lines]
+    return grid, len(grid), len(grid[0])
+
+def tointgrid(lines): 
+    grid = [list(map(int, line.split())) for line in lines]
+    return grid, len(grid), len(grid[0])
+    
+
+def get4nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
+    diff = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+    nb = []
+    for dr, dc in diff:
+        if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
+            nb.append((r+dr, c + dc))
+    return nb     
+
+def get8nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
+    diff = [(-1, 0), (1, 0), (0, 1), (0, -1), (-1, -1), (1, -1), (-1, 1), (1, 1)]
+    nb = []
+    for dr, dc in diff:
+        if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
+            nb.append((r+dr, c + dc))
+    return nb     
+
+def printgrid(grid):
+    for r in range(len(grid)):
+        out = ''.join(map(str, grid[r]))
+        print(out)
+
 
 
 def multisplit(s, schars):
@@ -31,7 +63,9 @@ def multisplit(s, schars):
     if curr: 
         out.append(curr)
     return out
-    
+
+
+
 def lazy_ints(li):
     return list(map(int_convert, li)) 
 

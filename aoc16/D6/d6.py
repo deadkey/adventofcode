@@ -16,18 +16,27 @@ def db(a):
 
 def p1(v):
     lines = v.strip().split('\n')
-    grid = []
-    for line in lines:
-        grid.append(list(line))
-        #print(grid)
-        #vals = lazy_ints(multisplit(line, ' '))
-        #print(vals)
-    return 0
+    grid, R, C = togrid(lines)
+    msg = ['']* C
+    for c in range(C):
+        cnt = Counter()
+        for r in range(R):
+            cnt[grid[r][c]] += 1
+        msg[c] = max(cnt, key = lambda x: cnt[x])
+        
+    return ''.join(msg)
 
 def p2(v):
     lines = v.strip().split('\n')
-    
-    return 0
+    grid, R, C = togrid(lines)
+    msg = ['']* C
+    for c in range(C):
+        cnt = Counter()
+        for r in range(R):
+            cnt[grid[r][c]] += 1
+        msg[c] = min(cnt, key = lambda x: cnt[x])
+        
+    return ''.join(msg)
 
 
 def manual():

@@ -11,23 +11,81 @@ import re
 
 def get_day(): return date.today().day
 def get_year(): return date.today().year
-def db(a):
-    if DB: print(a)
+def db(*a):
+    if DB: print(*a)
 
 def p1(v):
-    lines = v.strip().split('\n')
-    grid = []
-    for line in lines:
-        grid.append(list(line))
-        #print(grid)
-        #vals = lazy_ints(multisplit(line, ' '))
-        #print(vals)
-    return 0
+    pap = v.strip().split('\n\n')
+    cnt = 0
+    fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+    for pp in pap:
+        li = pp.split()
+        m = {}
+        for f in li:
+            fi, val = f.split(':')
+            m[fi] = val
+        if check1(m):
+            cnt += 1
+
+    return cnt
+
+def check1(m):
+    fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+    for f in fields:
+        if f not in m:
+            return False
+    return True
+
+def check2(m):
+    if not check1(m): return False
+    ok = True
+    ok = ok and inside(m['byr'], 1920, 2002)
+    ok = ok and inside(m['iyr'], 2010, 2020)
+    ok = ok and inside(m['eyr'], 2020, 2030)
+    db('First', ok)
+    hu = m['hgt']
+    u = hu[-2:]
+    h = hu[0:-2]
+    if u == 'cm': ok = ok and inside(h, 150, 193)
+    elif u == 'in': ok = ok and inside(h, 59, 76)
+    else:
+        ok = False
+    hcl = m['hcl']
+    ok = ok and iscol(hcl)
+    db('Sec', ok)
+    
+    acc = set(['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'])
+    ecl = m['ecl']
+    ok = ok and ecl in acc
+    pid = m['pid']
+    ok = ok and ispid(pid)
+    return ok
+
+
+def ispid(p):
+    return len(p) == 9 and all(x.isdigit() for x in p)    
+
+def iscol(col):
+    return col[0] == '#' and all(ord('0') <= ord(asc) <= ord('9') or ord('a') <= ord(asc) <= ord('f') for asc in col[1:])
+
+    
+def inside(val, mn, mx):
+    return isint(val) and mn <= int(val) <= mx
+
 
 def p2(v):
-    lines = v.strip().split('\n')
-    
-    return 0
+    pap = v.strip().split('\n\n')
+    cnt = 0
+    for pp in pap:
+        li = pp.split()
+        m = {}
+        for f in li:
+            fi, val = f.split(':')
+            m[fi] = val
+        if check2(m):
+            cnt += 1
+
+    return cnt
 
 
 def manual():
