@@ -14,15 +14,31 @@ def get_year(): return date.today().year
 def db(a):
     if DB: print(a)
 
+def tobin(line):
+    r = int(line[0:7].replace('F', '0').replace('B', '1'), 2)
+    c = int(line[-3:].replace('L', '0').replace('R', '1'), 2)
+    return r * 8 + c
+
 def p1(v):
     lines = v.strip().split('\n')
-    cnt = 0
-    return cnt
+    mx = 0
+    for line in lines:
+        id = tobin(line)
+        mx = max(mx, id)
+    return mx
 
 def p2(v):
     lines = v.strip().split('\n')
-    
-    return 0
+    mx = 0
+    seats = set()
+    for line in lines:
+        id = tobin(line)
+        mx = max(mx, id)
+        seats.add(id)
+    for s in range(mx + 1):
+        if s not in seats and s-1 in seats and s+1 in seats: 
+            return s
+    return -1
 
 
 def manual():
