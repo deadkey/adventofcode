@@ -48,6 +48,10 @@ def printgrid(grid):
         out = ''.join(map(str, grid[r]))
         print(out)
 
+def removeall(s, *arg):
+    for a in arg:
+        s = s.replace(a, '')
+    return s
 
 
 def multisplit(s, schars):

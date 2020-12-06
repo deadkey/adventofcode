@@ -4,26 +4,54 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-import drawgraph
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 8
+def get_year(): return 2015
 def db(*a):
     if DB: print(*a)
 
+def diff(v):
+    code = len(v)
+    v = v[1:-1]
+    slashes = re.findall('\\\\\\\\', v)
+    
+    quotes = re.findall('\\\\"', v)
+    
+    matches = re.findall('\\\\x[0-9a-f]{2}', v)
+    s = code -2 - len(slashes) - len(quotes) - 3 * len(matches) 
+    return code - s
+
+def diff2(v):
+    code = len(v)
+    v = v[1:-1]
+    slashes = re.findall('\\\\\\\\', v)
+    quotes = re.findall('\\\\"', v)
+    
+    matches = re.findall('\\\\x[0-9a-f]{2}', v)
+    enc = code + 4 +  2 * len(slashes) + 2 * len(quotes) + len(matches)
+    db(v, ' code ', code, ' enc ', enc)
+    return enc - code
+
 def p1(v):
+
     lines = v.strip().split('\n')
     cnt = 0
+    for line in lines:
+        d2 = diff(line)
+        cnt += d2
     return cnt
 
 def p2(v):
     lines = v.strip().split('\n')
-    
-    return 0
+    cnt = 0
+    for line in lines:
+        d2 = diff2(line)
+        cnt += d2
+    return cnt
 
 
 def manual():

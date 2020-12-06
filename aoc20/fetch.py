@@ -73,7 +73,7 @@ def answer(year, day, level, res):
     print("Are you sure? (y)es/(n)o")
     ans = input()
     if ans == 'y' or ans == 'yes':
-        print('Submitting {}'.format(answer))
+        print('Submitting {}'.format(res))
         text = submit(year, day, level, res)
         if "That's the right answer!" in text:
             print('AC!')

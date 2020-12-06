@@ -4,26 +4,82 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-import drawgraph
-#lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
+#lo, hi, lt, pw = lazy_ints(multisplit(line, '-: '))
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 9
+def get_year(): return 2016
 def db(*a):
     if DB: print(*a)
 
+def nxt(s, i):
+    for ii in range(i, len(s)):
+        if s[ii] == ')':
+            return ii
+    return len(s)
+
+def label(s):
+    s = removeall(s, '(', ')')
+    no, ti = lazy_ints(s.split('x'))
+    return no, ti
+
+
 def p1(v):
-    lines = v.strip().split('\n')
-    cnt = 0
-    return cnt
+    lines = v
+    print(lines)
+    change = True
+    
+    while change:
+        o = []
+        change = False
+        i = 0
+        while i < len(lines):
+            ch = lines[i]
+            if ch == '(':
+                
+                end = nxt(lines, i)
+                no, x = label(lines[i:end])
+                chunk = lines[end+1: min(end +1 +  no, len(lines))]
+                for i in range(x):
+                    o.append(chunk)
+                print(no, x, chunk)
+
+                i = end +  no
+            else:
+                o.append(ch)
+            i += 1
+        lines = ''.join(o)
+        print(lines)
+
+                
+
+    return len(lines)
+
+def expand(chunk):
+    i = 0
+    su = 0
+    while i < len(chunk):
+        ch = chunk[i]
+        if ch == '(':
+            
+            end = nxt(chunk, i)
+            no, x = label(chunk[i:end])
+            inner = chunk[end+1: min(end +1 +  no, len(chunk))]
+            su += x * expand(inner)
+
+            i = end +  no + 1
+        else:
+            i += 1
+            su += 1
+    return su
 
 def p2(v):
-    lines = v.strip().split('\n')
     
-    return 0
+    lines = v
+    return expand(lines)
+        
 
 
 def manual():

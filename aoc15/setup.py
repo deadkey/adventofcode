@@ -14,7 +14,7 @@ def createfolders(DAY):
         with open("{}/d{}.py".format(dirname, DAY), "w+") as f:
             text = open("template.py").read()
             text = text.replace('date.today().day', str(DAY))
-            text = text.replace('date.today().year', '2016')
+            text = text.replace('date.today().year', '2015')
             f.write(text)
 
 day = get_day()

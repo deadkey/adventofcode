@@ -4,14 +4,13 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-import drawgraph
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 6
+def get_year(): return 2015
 def db(*a):
     if DB: print(*a)
 

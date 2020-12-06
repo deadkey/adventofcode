@@ -8,10 +8,11 @@ def createfolders(DAY):
     dirname = 'D{}'.format(DAY)
     if not os.path.exists(dirname):
         os.mkdir(dirname)
-        open("{}/1.in".format(dirname), "w+")
-        open("{}/2.in".format(dirname), "w+")
-        open("{}/3.in".format(dirname), "w+")
+        for i in range(1, 6):
+            open("{}/{}.in".format(dirname, i), "w+")
+            
         with open("{}/d{}.py".format(dirname, DAY), "w+") as f:
+            
             f.write(open("template.py").read())
         
 

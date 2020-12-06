@@ -16,14 +16,32 @@ def db(*a):
     if DB: print(*a)
 
 def p1(v):
-    lines = v.strip().split('\n')
+    lines = v.strip().split('\n\n')
     cnt = 0
+    for g in lines:
+        g = g.strip().split()
+        s = set()
+        
+        for p in g:
+            s |= set(p)
+        cnt += len(s)
+
     return cnt
 
 def p2(v):
-    lines = v.strip().split('\n')
-    
-    return 0
+    lines = v.strip().split('\n\n')
+    cnt = 0
+    for g in lines:
+        g = g.strip().split()
+        s = set(g[0])
+        
+        for p in g:
+            
+            s &= set(p)
+        cnt += len(s)
+        
+
+    return cnt
 
 
 def manual():
