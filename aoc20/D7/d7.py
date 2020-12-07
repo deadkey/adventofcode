@@ -37,7 +37,8 @@ def p1(v):
     parent = defaultdict(list)
     nodes = set()
     for line in lines:
-        out, inner = line.split('contain')
+        out, inner = multisplit(line, 'contain')
+        
         out = ' '.join(out.split()[0:2])
         inner = inner.split(',')
         inside = parse(inner)
@@ -79,7 +80,29 @@ def count(bag, seen, g):
     return c
 
 def p2(v):
-    return p1(v)
+    mybag = 'shiny gold'
+    lines = v.strip().split('\n')
+    chunks = v.strip().split('\n\n')
+    cnt = 0
+    g = defaultdict(list)
+    parent = defaultdict(list)
+    nodes = set()
+    for line in lines:
+        out, inner = multisplit(line, 'contain')
+        out = ' '.join(out.split()[0:2])
+        inner = inner.split(',')
+        inside = parse(inner)
+        #db(out, inside)
+        g[out]= inside
+        for no, b in inside:
+            parent[b].append(out)
+    #db(parent)
+    cnt = 0
+    seen = {}
+    cnt =  count(mybag, seen,g)
+
+
+    return cnt -1
 
 
 def manual():
