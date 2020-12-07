@@ -4,6 +4,7 @@ import os, glob, time
 from datetime import datetime
 import bs4
 import logging as log
+import re
 
 def isint(i):
     try:
@@ -57,19 +58,10 @@ def printgrid(grid):
 
 
 
-def multisplit(s, schars):
-    out = []
-    curr = ''
-    for c in s:
-        if c in schars:
-            if curr:
-                out.append(curr)
-                curr = ''
-        else:
-            curr += c
-    if curr: 
-        out.append(curr)
-    return out
+def multisplit(s, *schars):
+    reg = '|'.join(schars)
+    out =  re.split(reg, s)
+    return list(map(lambda x: x.strip(), out))
 
 
 

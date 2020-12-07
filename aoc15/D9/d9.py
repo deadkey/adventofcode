@@ -4,82 +4,91 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-import drawgraph
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 9
+def get_year(): return 2015
 def db(*a):
     if DB: print(*a)
 
-def parse(s):
-    li = []
-    for b in s:
-        if 'no other' in b:
-            continue
-        b = b.strip()
-        data = b.split()
-        no = int(data[0])
-        name = ' '.join(data[1:-1])
-        li.append((no, name.strip()))
-    return li
+def travel(x, left, dists):
+    best = 10 ** 30
+
+    if not left: return 0
+    for nx in left:
+        alt = dists[x, nx]
+        new_left = set(left)
+        new_left.discard(nx)
+        alt_rest = travel(nx, new_left, dists)
+        alt += alt_rest
+        best = min(best, alt)
+    return best
+
+
+def travel2(x, left, dists):
+    best = 0
+
+    if not left: return 0
+    for nx in left:
+        alt = dists[x, nx]
+        new_left = set(left)
+        new_left.discard(nx)
+        alt_rest = travel2(nx, new_left, dists)
+        alt += alt_rest
+        best = max(best, alt)
+    return best
 
 
 def p1(v):
-    mybag = 'shiny gold'
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
     cnt = 0
     g = defaultdict(list)
-    parent = defaultdict(list)
-    nodes = set()
+    dists = {}
     for line in lines:
-        out, inner = line.split('contain')
-        out = ' '.join(out.split()[0:2])
-        inner = inner.split(',')
-        inside = parse(inner)
-        #db(out, inside)
-        g[out].append(inside)
-        for no, b in inside:
-            parent[b].append(out)
-    #db(parent)
-    ps = set()
-    q = list(parent[mybag])
-    seen = set()
-    while q:
-        q2 = []
-        for b in q:
-            ps.add(b)
-            if b not in seen:
-                seen.add(b)
-                for par in parent[b]:
-                    q2.append(par)
-        q = q2
-
-    return len(ps)
-
-def count(bag, seen, g):
-    q = list(g[bag])
-    c = 1
-    #db('q', q)
-    
-    for no, b in q:
-        #db('List', no, 'b', b, 'q', g)
-        if not b in seen:
-            
-            res = count(b, seen, g)
-            c += no * res
-            seen[b] = res
-        else:
-            c += no * seen[b]
+        fr, to, di = lazy_ints(multisplit(line, 'to', '='))
+        g[fr].append((to, di))
+        g[to].append((fr, di))
+        dists[(fr, to)] = di
+        dists[(to, fr)] = di
         
-    return c
+    
+    nodes = g.keys()
+    best = 10 ** 30
+    for node in nodes:
+        left = set(nodes)
+        left.discard(node)
+        alt = travel(node, left, dists)
+        best = min(best, alt)
+
+    return best
 
 def p2(v):
-    return p1(v)
+    lines = v.strip().split('\n')
+    chunks = v.strip().split('\n\n')
+    cnt = 0
+    g = defaultdict(list)
+    dists = {}
+    for line in lines:
+        fr, to, di = lazy_ints(multisplit(line, 'to', '='))
+        g[fr].append((to, di))
+        g[to].append((fr, di))
+        dists[(fr, to)] = di
+        dists[(to, fr)] = di
+        
+    
+    nodes = g.keys()
+    best = 0
+    for node in nodes:
+        left = set(nodes)
+        left.discard(node)
+        alt = travel2(node, left, dists)
+        best = max(best, alt)
+
+    return best
 
 
 def manual():
@@ -124,6 +133,7 @@ def get_args():
 
 if __name__ == '__main__':
     get_args()
+    
     if not io: run_samples(p1, p2, cmds)
     if not so: run(get_year(),  get_day(), p1, p2, cmds)
     if stats: print_stats()

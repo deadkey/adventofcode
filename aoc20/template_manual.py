@@ -8,21 +8,21 @@ import sys
 
 def get_day(): return date.today().day
 def get_year(): return date.today().year
-def db(a):
-    if DB: print(a)
+def db(*a):
+    if DB: print(*a)
+
 
 def p1(v):
     lines = v.strip().split('\n')
-    su = 0
+    chunks = v.strip().split('\n\n')
+    cnt = 0
     for line in lines:
-        val = int(line)
-        
-    return su
+        pass
+    return cnt
 
 def p2(v):
-    lines = v.strip().split('\n')
-    
-    return 0
+    return p1(v)
+
 
 
 DB = 1

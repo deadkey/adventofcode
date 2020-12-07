@@ -3,6 +3,7 @@ from secret import session
 import os, glob, time
 from datetime import datetime
 import bs4
+from shutil import copyfile
 
 def dl(fname, day, year):
     
@@ -77,6 +78,8 @@ def answer(year, day, level, res):
         text = submit(year, day, level, res)
         if "That's the right answer!" in text:
             print('AC!')
+            if level == 1: copyfile('d{}.py'.format(day), 'd{}_part1.py'.format(day))
+
         else:
             print('WRONG!')
         print('>> ' + text)

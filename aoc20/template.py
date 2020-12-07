@@ -17,13 +17,14 @@ def db(*a):
 
 def p1(v):
     lines = v.strip().split('\n')
+    chunks = v.strip().split('\n\n')
     cnt = 0
+    for line in lines:
+        pass
     return cnt
 
 def p2(v):
-    lines = v.strip().split('\n')
-    
-    return 0
+    return p1(v)
 
 
 def manual():

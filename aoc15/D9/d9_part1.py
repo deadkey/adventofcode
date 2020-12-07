@@ -4,24 +4,52 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-import drawgraph
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
 #use regex re.split(' |,|: ', line)
 
-def get_day(): return date.today().day
-def get_year(): return date.today().year
+def get_day(): return 9
+def get_year(): return 2015
 def db(*a):
     if DB: print(*a)
+
+def travel(x, left, dists):
+    best = 0
+
+    if not left: return 0
+    for nx in left:
+        alt = dists[x, nx]
+        new_left = set(left)
+        new_left.discard(nx)
+        alt_rest = travel(nx, new_left, dists)
+        alt += alt_rest
+        best = max(best, alt)
+    return best
 
 def p1(v):
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
     cnt = 0
+    g = defaultdict(list)
+    dists = {}
     for line in lines:
-        pass
-    return cnt
+        fr, to, di = lazy_ints(multisplit(line, 'to', '='))
+        g[fr].append((to, di))
+        g[to].append((fr, di))
+        dists[(fr, to)] = di
+        dists[(to, fr)] = di
+        
+    
+    nodes = g.keys()
+    best = 0
+    for node in nodes:
+        left = set(nodes)
+        left.discard(node)
+        alt = travel(node, left, dists)
+        best = max(best, alt)
+
+    return best
 
 def p2(v):
     return p1(v)
