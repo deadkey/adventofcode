@@ -13,7 +13,6 @@ def isint(i):
     except:
         return False
 
-
 def removeall(s, *arg):
     for a in arg:
         s = s.replace(a, '')

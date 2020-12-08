@@ -61,6 +61,7 @@ def multisplit(s, *schars):
     out =  re.split(reg, s)
     return list(map(lambda x: x.strip(), out))
 
+
 def lazy_ints(li):
     return list(map(int_convert, li)) 
 
