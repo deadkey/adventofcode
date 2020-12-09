@@ -13,6 +13,9 @@ import re
 def db(*a): 
     if DB: print(*a)
 
+def parse(line):
+    return int(line)
+
 def p1(v):
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
