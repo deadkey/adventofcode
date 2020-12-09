@@ -4,7 +4,7 @@ import os, glob, time
 from datetime import datetime
 import bs4
 from shutil import copyfile
-
+import progressbar
 from datetime import date
 
 def get_day(): return date.today().day
@@ -29,7 +29,25 @@ def dl(fname, day, year):
         f.write(r.text)
     return 0
 
-
+def wait_until(YEAR, DAY):
+    target = datetime(YEAR, 12, DAY, 6, 0, 0, 100)
+    now = datetime.now()
+    tE = target.timestamp()
+    t0 = now.timestamp()
+    M = int(tE-t0) + 1
+    if M <= 0: return
+    widgets=[
+        ' [', progressbar.CurrentTime(), '] ',
+        progressbar.Bar(),
+        ' (', progressbar.ETA(), ') ',
+    ]
+    print(f'waiting from {now} until {target}')
+    bar = progressbar.ProgressBar(max_value=int(tE-t0), widgets=widgets)
+    while time.time() < tE:
+        cT = time.time()
+        bar.update(min(M, int(cT - t0)))
+        time.sleep(1)
+    bar.finish()
 
 def get_args(argv):
     FF = "force fetch"
@@ -75,11 +93,7 @@ def fetch(YEAR, DAY, cmds):
     
     target = get_target(YEAR, DAY)
     fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
-    now = time.time()
-    left = target - now
-    if left > 0:
-        print("Target: {} Now: {}".format(target, now))
-        print("Seconds Left: {}".format(left))
+    wait_until(YEAR, DAY)
     
     filename = 'real.txt'
     exists = os.path.isfile(filename)

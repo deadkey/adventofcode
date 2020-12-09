@@ -12,14 +12,12 @@ def createfolders(DAY):
             open("{}/{}.in".format(dirname, i), "w+")
             
         with open("{}/d{}.py".format(dirname, DAY), "w+") as f:
-            
-            f.write(open("template.py").read())
-        
-
+            text = open("template.py").read()
+            text = text.replace('run(get_year(),  get_day(), p1, p2, cmds)', 'run({},{}, p1, p2, cmds)'.format(2020, DAY))
+            f.write(text)
 
 day = get_day()
 
 if len(sys.argv) > 1:
     day = int(sys.argv[1])
 createfolders(day)
-
