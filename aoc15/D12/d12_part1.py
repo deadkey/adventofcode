@@ -4,7 +4,7 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-#import drawgraph
+#import drawgraph only works for python3!
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
@@ -15,11 +15,18 @@ def db(*a):
 
 def p1(v):
     lines = v.strip().split('\n')
-    chunks = v.strip().split('\n\n')
+    filtered = []
     cnt = 0
     for line in lines:
-        pass
-    return cnt
+        for ch in line:
+            if ch.isdigit() or ch == '-':
+                filtered.append(ch)
+            else:
+                filtered.append(' ')
+    newstr = ''.join(filtered)
+    no = lazy_ints(newstr.split())
+    
+    return sum(no)
 
 def p2(v):
     return p1(v)
@@ -31,6 +38,6 @@ def manual():
         
 cmds, stats, io, so, DB = get_args(sys.argv)    
 if not io: run_samples(p1, p2, cmds)
-if not so: run(get_year(),  get_day(), p1, p2, cmds)
+if not so: run(2015,12, p1, p2, cmds)
 if stats: print_stats()
 #manual()
