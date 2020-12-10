@@ -20,8 +20,7 @@ def p1(v):
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
     cnt = 0
-    for line in lines:
-        pass
+    data = [parse(line) for line in lines]
     return cnt
 
 def p2(v):
