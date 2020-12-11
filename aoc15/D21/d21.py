@@ -68,7 +68,44 @@ def p1(v):
     return best
 
 def p2(v):
-    return p1(v)
+    weapons_lines = open("weapons.txt", 'r').read().strip('\n').split('\n')
+    armor_lines = open("armor.txt", 'r').read().strip('\n').split('\n')
+    rings_lines = open("rings.txt", 'r').read().strip('\n').split('\n')
+    weapons = [parse(line) for line in weapons_lines]
+    armor = [parse(line) for line in armor_lines]
+    rings = [parse(line) for line in rings_lines]
+    db(weapons)
+    #won = simulate(1, 8, 5, 5, 12, 7, 2)
+    hitpoints = 100
+    boss = (103, 9, 2)  
+    best = 0
+    
+    for w in weapons:
+        wcost = w[1]
+        damage = w[2]
+        for a in armor:
+            acost = a[1]
+            arm = a[3]
+            for i in range(len(rings)):
+                r1 = rings[i]
+                d1diff = r1[3]
+                r1cost = r1[2]
+                r1arm = r1[4]
+                for k in range(i+1, len(rings)):
+                    r2 = rings[k]
+                    d2diff = r2[3]
+                    r2cost = r2[2]
+                    r2arm = r2[4]
+
+                    totcost = wcost + acost + r1cost + r2cost
+                    totdamage = damage + d1diff + d2diff
+                    totarmor = arm + r1arm + r2arm
+                    won = simulate(1, hitpoints, totdamage, totarmor, boss[0], boss[1], boss[2])
+                    if won == -1:
+                        best = max(best, totcost)
+
+
+    return best
 
 
 def manual():
