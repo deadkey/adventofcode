@@ -10,14 +10,15 @@ class Program:
         vm.used = set()
         vm.running = True
         
-
+    #Wite a function that returns the offset!
+    #def exec(vm, op,r, offset = None): 
     def step(vm):
         ins = vm.ins
-        op, val = ins[vm.i]
-        vm.i += vm.exec_func(vm, op, val)
+        vm.i += vm.exec_func(vm, *ins[vm.i])
         if vm.i >= len(ins):
             print("Terminated")
             vm.running = False
+        
         
     def run(vm):
         ins = vm.ins

@@ -80,6 +80,7 @@ def printgrid(grid):
 def multisplit(s, *schars):
     reg = '|'.join(schars)
     out =  re.split(reg, s)
+    out = filter(lambda x: len(x)> 0, out)
     return list(map(lambda x: x.strip(), out))
 
 

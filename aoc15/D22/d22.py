@@ -10,115 +10,243 @@ from util import *
 import re
 #use regex re.split(' |,|: ', line)
 
+from heapq import heappop as pop, heappush as push
+
 def db(*a): 
     if DB: print(*a)
 
 def parse(line):
     return lazy_ints(line.split())
 
-def cp(d):
-    newd = {}
-    for key in d.keys():
-        newd[key] = d[key]
-    return newd
-
-def debug(player, values, spellorder, spells, activespells, depth):
-    
-    #db(f'Calling for player {player} with values {values} and active spells {activespells}')
-    hp = values['hp'] if player == 1 else values['bosshp']
-    if hp <= 0: return 0, -player
-    
-    nextspells = {}
-    temparmor = values['armor'] #ignored for now
-    
-    for spell in activespells.keys():
-        time, dameff, armeff, manaeff = activespells[spell]
-        time -= 1
-        values['bosshp'] -= dameff
-        temparmor += armeff
-        values['mana'] += manaeff 
-        temparmor += armeff   
-        if time >0:
-            nextspells[spell] = (time, dameff, armeff, manaeff)
-    
-    if values['hp'] <= 0 or values['bosshp'] <= 0:
-        return 0, 1 if values['bosshp'] <= 0 else -1
-
-    dam = values['bossdamage'] if player == -1 else values['damage']
-    otherarmor = temparmor if player == -1 else values['bossarmor']
-    dam = 0 if dam == 0 else max(1, dam - otherarmor)
-    if player == 1:
-        values['bosshp'] -= dam
-    else:
-        values['hp'] -= dam
-    best = 10 ** 10
-    canwin = 0
-    '''
-    if player == 1 and len(spellorder) > 0:
-        spell = spellorder[0]
-        spellorder = spellorder[1:]
-        cost, instantdamage, healhp, effectL, dameff, armeff, manaeff = spells[spell]
-    else:
-        cost, instantdamage, healhp, effectL, dameff, armeff, manaeff = 0, 0, 0, 0, 0, 0, 0
-    '''
-    #if values['mana'] >= cost:
-    best = 10 ** 10
-    canwin = 0
-    db(f'Times = {depth}')
-    for spell in spells:
-           if spell not in nextspells:
-               cost, instantdamage, healhp, effectL, dameff, armeff, manaeff = spells[spell]
-               if values['mana'] >= cost:
-
-                    tempval = cp(values)
-                    tempval['mana'] -= cost
-                    tempactivespells = cp(nextspells)
-                    tempval['bosshp'] -= instantdamage
-                    tempval['hp']  += healhp
-                    if effectL > 0:
-                        tempactivespells[spell] = (effectL, dameff, armeff, manaeff)
-                    #db(f'After calling for player {player} with values {tempval} and active spells {tempactivespells}\n')
-                    
-                    spent, winner = debug(-player, tempval, spellorder, spells, tempactivespells, depth + 1)
-                    if winner == 1:
-                        best = min(cost + spent, best)
-                        #db(f'Best {best}')
-                        canwin = 1
 
 
-    return best, canwin
-
+def inf():return 10 ** 12
 
 def p1(v):
     #mana = 500
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
-    spell_lines = open("spells.txt", 'r').read().strip('\n').split('\n')
-    spellList = [parse(line) for line in spell_lines]
 
-    spells = {}
-    for sp in spellList:
-        name, cost, damage, healhp, effectL, dameff, armeff, manaeff = sp
-        spells[name] = (cost, damage, healhp, effectL, dameff, armeff, manaeff)
-    #name, cost, damage, healhp, effecttime, dameff, armoreff, manaeff
-    hp = 50
-    mana = 500
-    bosshp = 55
-    bossdam = 8
-    values = {}
-    values['hp'] = hp
-    values['bosshp'] = bosshp
-    values['mana'] = mana
-    values['damage'] = 0
-    values['bossdamage'] = bossdam
-    values['armor'] = 0
-    values['bossarmor'] = 0
-    spent, winner = debug(1, values, [], spells, {}, 0)
+    hp = 50 #10#50
+    mana = 500 # 250#
+    bosshp = 55 #55
+    bossdamage = 8
+    mm_cost = 53
+    mm_damage = 4
+    d_cost = 73
+    d_hp = 2
+    d_damage = 2
+    sh_cost = 113
+    sh_arm = 7
+    sh_eff = 6
+    poi_eff = 6
+    re_eff = 5
+    poi_dam = 3
+    re_mana = 101
+    poi_cost = 173
+    re_cost = 229
+    testcost = re_cost + sh_cost + d_cost + poi_cost + mm_cost
+    db(testcost) 
+    spending = defaultdict(inf)
+    pq = []
+    startstate = (True, hp, mana, bosshp, bossdamage, 0, 0, 0)
+    pq.append((0,startstate))
+    spending[startstate] = 0
+    done = False
+    
+    while pq and not done:
+        spent, currstate = pop(pq)
+        db(f'Spent {spent} currstate {currstate}')
+        player, hp, mana, bosshp, bossdamage, sh, poi, rec = currstate
+        if bosshp <= 0:
+            
+            return spent
+        else:
+            if not player:
+                armor = int(sh >0) * sh_arm
+                #boss. Deal damage from active spells;
+                bosshp -= int(poi >0) * poi_dam
+                if bosshp <= 0: return spent
+                mana += int(rec >0) * re_mana
+                hp -= max(1, bossdamage - armor)
+                boss_alt = not player, hp, mana, bosshp, bossdamage, max(sh -1, 0), max(0, poi-1), max(rec-1, 0)
+                if hp >0 and spending[boss_alt] > spending[currstate]:
+                    spending[boss_alt] = spent
+                    push(pq, (spent, boss_alt))
+                    db(f'Boss done, current state {boss_alt}')
+            else:
+                bosshp -= int(poi >0) * poi_dam
+                if bosshp <= 0: return spent
+                mana += int(rec >0) * re_mana
+                #active spells should be carried out.
+                #deal damage.
 
-    return spent 
+                if player:
+                    #cast magic missile
+                    if mana >= mm_cost:
+                        mm_alt = not player, hp, mana- mm_cost, bosshp- mm_damage, bossdamage, max(sh -1, 0), max(0, poi-1), max(rec-1, 0)
+                        if spending[mm_alt] > spending[currstate] + mm_cost:
+                            newcost = spent + mm_cost
+                            spending[mm_alt] = newcost
+                            push(pq, (newcost, mm_alt))
+                    # cast drain
+
+                    if mana >= d_cost:
+                        d_alt = not player, hp+d_hp, mana- d_cost, bosshp-d_damage, bossdamage, max(sh -1, 0), max(0, poi-1), max(rec-1, 0)
+                        if spending[d_alt] > spending[currstate] + d_cost:
+                            newcost = spent + d_cost
+                            spending[d_alt] = newcost
+                            push(pq, (newcost, d_alt))
+
+                    #cast shield
+
+                    if mana >= sh_cost and sh == 0:
+                        
+                        sh_alt = not player, hp, mana- sh_cost, bosshp, bossdamage, sh_eff, max(0, poi-1), max(rec-1, 0)
+                        if spending[sh_alt] > spending[currstate] + sh_cost:
+                            newcost = spent + sh_cost
+                            spending[sh_alt] = newcost
+                            push(pq, (newcost, sh_alt))
+
+                    #cast poison
+
+                    if mana >= poi_cost and poi == 0:
+                        
+                        poi_alt = not player, hp, mana- poi_cost, bosshp, bossdamage, max(sh-1, 0),poi_eff, max(rec-1, 0)
+                        if spending[poi_alt] > spending[currstate] + poi_cost:
+                            newcost = spent + poi_cost
+                            spending[poi_alt] = newcost
+                            push(pq, (newcost, poi_alt))
+                    #cast recharge
+
+                    if mana >= re_cost and rec == 0:
+                        
+                        rec_alt = not player, hp, mana- poi_cost, bosshp, bossdamage, max(sh-1, 0), max(0, poi-1), re_eff
+                        if spending[rec_alt] > spending[currstate] + re_cost:
+                            newcost = spent + re_cost
+                            spending[rec_alt] = newcost
+                            push(pq, (newcost, rec_alt))
+                    
+
+    return best
 
 def p2(v):
-    return p1(v)
+    #mana = 500
+    hp = 50#10#50
+    mana = 500 # 250#
+    bosshp = 55 #55
+    bossdamage = 8
+    mm_cost = 53
+    mm_damage = 4
+    d_cost = 73
+    d_hp = 2
+    d_damage = 2
+    sh_cost = 113
+    sh_arm = 7
+    sh_eff = 6
+    poi_eff = 6
+    re_eff = 5
+    poi_dam = 3
+    re_mana = 101
+    poi_cost = 173
+    re_cost = 229
+    testcost = re_cost + sh_cost + d_cost + poi_cost + mm_cost
+    db(testcost) 
+    spending = defaultdict(inf)
+    pq = []
+    startstate = (True, hp, mana, bosshp, bossdamage, 0, 0, 0)
+    pq.append((0,startstate))
+    spending[startstate] = 0
+    done = False
+    
+    while pq and not done:
+        spent, currstate = pop(pq)
+        db(f'Spent {spent} currstate {currstate}')
+        player, hp, mana, bosshp, bossdamage, sh, poi, rec = currstate
+
+        if bosshp <= 0:    
+            return spent
+        
+        else:
+
+            if not player:
+                armor = int(sh >0) * sh_arm
+                #boss. Deal damage from active spells;
+                bosshp -= int(poi >0) * poi_dam
+                
+                if bosshp <= 0: return spent
+                mana += int(rec >0) * re_mana
+                hp -= max(1, bossdamage - armor)
+                boss_alt = not player, hp, mana, bosshp, bossdamage, max(sh -1, 0), max(0, poi-1), max(rec-1, 0)
+                if hp >0 and spending[boss_alt] > spending[currstate]:
+                    spending[boss_alt] = spent
+                    push(pq, (spent, boss_alt))
+                    #db(f'Boss done, current state {boss_alt}')
+            else:
+                    
+                hp -= 1
+                if hp < 0: continue
+
+                bosshp -= int(poi >0) * poi_dam
+                if bosshp <= 0: return spent
+                mana += int(rec >0) * re_mana
+
+                sh, poi, rec = max(sh -1, 0), max(0, poi-1), max(rec-1, 0)
+
+                #active spells should be carried out.
+                #deal damage.
+
+                if player:
+                   
+
+                    #cast magic missile
+                    if mana >= mm_cost:
+                        mm_alt = not player, hp, mana- mm_cost, bosshp- mm_damage, bossdamage, sh, poi, rec 
+                        if hp > 0 and spending[mm_alt] > spending[currstate] + mm_cost:
+                            newcost = spent + mm_cost
+                            spending[mm_alt] = newcost
+                            push(pq, (newcost, mm_alt))
+                    # cast drain
+
+                    if mana >= d_cost:
+                        d_alt = not player, hp+d_hp, mana- d_cost, bosshp-d_damage, bossdamage, sh, poi, rec
+                        if hp + d_hp > 0 and spending[d_alt] > spending[currstate] + d_cost:
+                            newcost = spent + d_cost
+                            spending[d_alt] = newcost
+                            push(pq, (newcost, d_alt))
+
+                    #cast shield
+
+                    if mana >= sh_cost and sh == 0:
+                        
+                        sh_alt = not player, hp, mana- sh_cost, bosshp, bossdamage, sh_eff, poi, rec
+                        if hp > 0 and spending[sh_alt] > spending[currstate] + sh_cost:
+                            newcost = spent + sh_cost
+                            spending[sh_alt] = newcost
+                            push(pq, (newcost, sh_alt))
+
+                    #cast poison
+
+                    if mana >= poi_cost and poi == 0:
+                        
+                        poi_alt = not player, hp, mana- poi_cost, bosshp, bossdamage, sh,poi_eff, rec
+                        if hp > 0 and spending[poi_alt] > spending[currstate] + poi_cost:
+                            newcost = spent + poi_cost
+                            spending[poi_alt] = newcost
+                            push(pq, (newcost, poi_alt))
+                    #cast recharge
+
+                    if mana >= re_cost and rec == 0:
+                        
+                        rec_alt = not player, hp, mana- re_cost, bosshp, bossdamage, sh, poi, re_eff
+                        if hp > 0 and spending[rec_alt] > spending[currstate] + re_cost:
+                            newcost = spent + re_cost
+                            spending[rec_alt] = newcost
+                            push(pq, (newcost, rec_alt))
+                    
+
+    return best
+
 
 
 def manual():
