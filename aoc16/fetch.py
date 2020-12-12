@@ -3,6 +3,12 @@ from secret import session
 import os, glob, time
 from datetime import datetime
 import bs4
+from shutil import copyfile
+
+from datetime import date
+
+def get_day(): return date.today().day
+def get_year(): return date.today().year
 
 def dl(fname, day, year):
     
@@ -22,6 +28,41 @@ def dl(fname, day, year):
     with open(fname,'w') as f:
         f.write(r.text)
     return 0
+
+
+
+def get_args(argv):
+    FF = "force fetch"
+    DB = 0
+    PR = "print input"
+    so = 0
+    io = 0
+    stats = 0
+    cmds = []    
+    for arg in argv[1:]:
+        if arg == 'f':
+           cmds.append(FF)
+        if arg == 's1' or  arg == '1':
+           cmds.append("submit1")
+        if arg == 's2' or arg == '2':
+           cmds.append("submit2")
+        if arg == 'p' or arg == 'pi':
+           cmds.append(PR)
+        if arg == 'so':
+            so = 1
+        if arg == 'io':
+            io = 1
+        if arg == 'db':
+            DB = 1
+        if arg == 'st' or arg == 'stat' or arg == 'stats':
+            stats = 1
+        if arg == 'p1' or arg == 'part1':
+            cmds.append('p1')
+        if arg == 'p2' or arg == 'part2':
+            cmds.append('p2')
+    return cmds, stats, io, so, DB
+        
+
 
 def mkdirs(f):
     try:
@@ -77,6 +118,8 @@ def answer(year, day, level, res):
         text = submit(year, day, level, res)
         if "That's the right answer!" in text:
             print('AC!')
+            if level == 1: copyfile('d{}.py'.format(day), 'd{}_part1.py'.format(day))
+
         else:
             print('WRONG!')
         print('>> ' + text)

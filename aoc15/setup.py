@@ -13,7 +13,7 @@ def createfolders(DAY):
             
         with open("{}/d{}.py".format(dirname, DAY), "w+") as f:
             text = open("template.py").read()
-            text = text.replace('run(get_year(),  get_day(), p1, p2, cmds)', 'run({},{}, p1, p2, cmds)'.format(2015, DAY))
+            text = text.replace('run(get_year(),  get_day(), p1, p2, cmds)', 'run({},{}, p1, p2, cmds)'.format(2016, DAY))
             f.write(text)
 
 day = get_day()
