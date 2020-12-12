@@ -16,6 +16,7 @@ def db(*a):
 def parse(line):
     return list(line)
 
+
 def p1(v):
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')

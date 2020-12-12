@@ -43,97 +43,56 @@ def p1(v):
             
     return len(res)
 
-def solve(L, seen, reac, mx, BEST):
-    if BEST == 0: return 0
+def solve(L, cas, reac, seen, BEST):
+    if BEST <= 0 or L == 'e':
+        return 0
     if L in seen:
         return seen[L]
-    best = BEST
-    
-    for i in range(len(L)):
-        for k in range(2, mx+1):
-            testkey = L[i:i+ k]
-            if testkey in reac:
-                for alt in reac[testkey]:
-                    st = L[0:i] + alt + L[i + k:]
-                    best = min(best, 1+ solve(st, seen, reac, mx, best-1))
-    
-    seen[L] = best
-    if len(seen) % 10000 == 0: print(len(seen), len(L))
-    
-    return best
+    '''    
+    for ca in cas:
+        if ca in L:
+            
+            oldL = len(L)
+            nxtL = L.replace(ca, cas[ca])
+            newL = len(nxtL)
+            k = (oldL - newL)//2
+            
+            res =  k + solve(nxtL, cas, reac,seen,  BEST - k)
+            BEST = min(res, BEST)
+            seen[L] = res
+            return res
+    '''
+    for r, l in reac:
+        if r in L:
+             
+            k = L.count(r)
+            nxtL = L.replace(r, l)
+            
+            
+            res =  k + solve(nxtL, cas, reac, seen, BEST - k)
+            return res
+            #BEST = min(res, BEST)
+    #seen[L] = BEST
 
-def bfs(LL, reac, mx):
-    q = [LL]
-    seen = set(q)
-    cnt = 0
-    while q:
-        q2 = []
-        for L in q:
-            if L == 'e': return cnt
-            for i in range(len(L)):
-                for k in range(2, mx+1):
-                    testkey = L[i:i+ k]
-                    if testkey in reac:
-                        for alt in reac[testkey]:
-                            st = L[0:i] + alt + L[i + k:]
-                            if st not in seen:
-                                seen.add(st)
-                                q2.append(st)
-        q = q2
-        cnt += 1
-        db(cnt)
-
-def elems(s):
-    els = []
-    curr = []
-    for ch in s:
-        if ch.islower():
-            curr.append(ch)
-            if len(curr) > 0: els.append(''.join(curr))
-            curr = []
-        else:
-            if len(curr) > 0: els.append(''.join(curr))
-            curr = [ch]
-    if len(curr) > 0: els.append(''.join(curr))     
-    return els          
+    return BEST
 
 def p2(v):
-    forbStart = {'Rn', 'F', 'Ar', 'Y', 'Mg', 'Al'}
-    forbEnd = {'Rn', 'F', 'Y', 'C', 'N'}
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
-    cnt = 0
     vals = [parse(line) for line in lines]
-    reac = defaultdict(list)
-    mx = 0
-    total = []
-    start = set()
-    end = set()
+    reac = []
+    #mx = 0
+    cas = {}
     for l, r in vals:
-        el = elems(r)
-        
-        start.add(el[0])
-        total.extend(el)
-        end.add(el[-1])
-        reac[r].append(l)
-        mx = max(len(r), mx)
-    cntR = Counter(total)
-    print(start, end)
-    print(set(cntR.keys()) - start)
-    print(set(cntR.keys()) - end)
-    
-    print(len(cntR), len(start), len(end))
-    db(cntR)
-    test = 'CRnCaCaCaSiRnBPTiMgArSiRnSiRnMgArSiRnCaFArTiTiBSiThFYCaFArCaCaSiThCaPBSiThSiThCaCaPTiRnPBSiThRnFArArCaCaSiThCaSiThSiRnMgArCaPTiBPRnFArSiThCaSiRnFArBCaSiRnCaPRnFArPMgYCaFArCaPTiTiTiBPBSiThCaPTiBPBSiRnFArBPBSiRnCaFArBPRnSiRnFArRnSiRnBFArCaFArCaCaCaSiThSiThCaCaPBPTiTiRnFArCaPTiBSiAlArPBCaCaCaCaCaSiRnMgArCaSiThFArThCaSiThCaSiRnCaFYCaSiRnFYFArFArCaSiRnFYFArCaSiRnBPMgArSiThPRnFArCaSiRnFArTiRnSiRnFYFArCaSiRnBFArCaSiRnTiMgArSiThCaSiThCaFArPRnFArSiRnFArTiTiTiTiBCaCaSiRnCaCaFYFArSiThCaPTiBPTiBCaSiThSiRnMgArCaF'
-    el = elems(test)
-    cntEl = Counter(el)
-
-    #test = ['HOH', 'HOHOHO','H2O' ]
-    #test = 'HOH'
+        #el = elems(r)
+        reac.append((r, l))
+        if 'Ca' in r:
+            cas[r] = l
+    reac.sort(reverse = True, key = lambda x: len(x[0]) - len(x[1]))
     seen = {}
-    exit()
-    return bfs(test, reac, mx)
-
+    test = 'CRnCaCaCaSiRnBPTiMgArSiRnSiRnMgArSiRnCaFArTiTiBSiThFYCaFArCaCaSiThCaPBSiThSiThCaCaPTiRnPBSiThRnFArArCaCaSiThCaSiThSiRnMgArCaPTiBPRnFArSiThCaSiRnFArBCaSiRnCaPRnFArPMgYCaFArCaPTiTiTiBPBSiThCaPTiBPBSiRnFArBPBSiRnCaFArBPRnSiRnFArRnSiRnBFArCaFArCaCaCaSiThSiThCaCaPBPTiTiRnFArCaPTiBSiAlArPBCaCaCaCaCaSiRnMgArCaSiThFArThCaSiThCaSiRnCaFYCaSiRnFYFArFArCaSiRnFYFArCaSiRnBPMgArSiThPRnFArCaSiRnFArTiRnSiRnFYFArCaSiRnBFArCaSiRnTiMgArSiThCaSiThCaFArPRnFArSiRnFArTiTiTiTiBCaCaSiRnCaCaFYFArSiThCaPTiBPTiBCaSiThSiRnMgArCaF'
+    return solve(test, cas, reac, seen, 10**10)
+    
 
 def manual():
     v = open("real.txt", 'r').read().strip('\n')
