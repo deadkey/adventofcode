@@ -79,10 +79,19 @@ def printgrid(grid):
         print(out)
 
 def multisplit(s, *schars):
-    reg = '|'.join(schars)
-    out =  re.split(reg, s)
-    out = filter(lambda x: len(x)> 0, out)
-    return list(map(lambda x: x.strip(), out))
+    out = [s]
+    for delim in schars:
+        newout = []
+        for word in out:
+            spl = word.split(delim)
+            newout.extend(spl)
+        out = newout
+    #reg = '|'.join(schars)
+    #out =  re.split(reg, s)
+    out = list(map(lambda x: x.strip(), out))
+    out = filter(lambda x: len(x.strip())> 0, out)
+
+    return out
 
 
 def lazy_ints(li):

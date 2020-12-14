@@ -14,7 +14,7 @@ def db(*a):
     if DB: print(*a)
 
 def parse(line):
-    return int(line)
+    return lazy_ints(line.split())
 
 def p1(v):
     lines = v.strip().split('\n')
