@@ -172,9 +172,10 @@ def run_samples(p1_fn, p2_fn, cmds):
         if len(data) > 0:
             print('Running: {}'.format(fname))
             res1 = p1_fn(data) if part1 else "Skipping"
+            print("Sample part 1: {}".format(res1))
             res2 = p2_fn(data) if part2 else 'Skipping'
         
-            print("Sample part 1: {}".format(res1))
+            
             print("Sample part 2: {}".format(res2))
             print('##############################')
 
@@ -186,10 +187,11 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
     print('Running real input')
     
     res1 = p1_fn(v) if part1 else "Skipping"
+    print('part_1: {}'.format(res1))
     res2 = p2_fn(v) if part2 else 'Skipping'
         
 
-    print('part_1: {}'.format(res1))
+ 
     print('part_2: {}'.format(res2))
         
 

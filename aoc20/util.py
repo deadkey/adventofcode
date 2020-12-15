@@ -93,9 +93,15 @@ def multisplit(s, *schars):
 
     return out
 
+def chunks(v):
+    return v.strip().split('\n\n')
+
 
 def lazy_ints(li):
-    return list(map(int_convert, li)) 
+    li = list(map(int_convert, li)) 
+    if len(li) == 1:
+        return li[0]
+    return li
 
 def print_stats():
 
