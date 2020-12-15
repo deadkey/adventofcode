@@ -4,7 +4,9 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-#import drawgraph
+
+from collections import defaultdict as dd
+#import drawgraph #only works in python3
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
@@ -15,12 +17,13 @@ def db(*a):
 
 def parse(line):
     return lazy_ints(line.split())
+    
 
 def p1(v):
     lines = v.strip().split('\n')
     chunks = v.strip().split('\n\n')
     cnt = 0
-    vals = [parse(line) for line in lines]
+    data = [parse(line) for line in lines]
     return cnt
 
 def p2(v):

@@ -4,7 +4,7 @@ import os, glob, time
 from datetime import datetime
 import bs4
 from shutil import copyfile
-
+import progressbar
 from datetime import date
 
 def get_day(): return date.today().day
@@ -29,7 +29,25 @@ def dl(fname, day, year):
         f.write(r.text)
     return 0
 
-
+def wait_until(YEAR, DAY):
+    target = datetime(YEAR, 12, DAY, 6, 0, 0, 100)
+    now = datetime.now()
+    tE = target.timestamp()
+    t0 = now.timestamp()
+    M = int(tE-t0) + 1
+    if M <= 0: return
+    widgets=[
+        ' [', progressbar.CurrentTime(), '] ',
+        progressbar.Bar(),
+        ' (', progressbar.ETA(), ') ',
+    ]
+    print(f'waiting from {now} until {target}')
+    bar = progressbar.ProgressBar(max_value=int(tE-t0), widgets=widgets)
+    while time.time() < tE:
+        cT = time.time()
+        bar.update(min(M, int(cT - t0)))
+        time.sleep(1)
+    bar.finish()
 
 def get_args(argv):
     FF = "force fetch"
@@ -75,11 +93,7 @@ def fetch(YEAR, DAY, cmds):
     
     target = get_target(YEAR, DAY)
     fmt_str = '%(asctime)-15s %(filename)8s:%(lineno)-3d %(message)s'
-    now = time.time()
-    left = target - now
-    if left > 0:
-        print("Target: {} Now: {}".format(target, now))
-        print("Seconds Left: {}".format(left))
+    wait_until(YEAR, DAY)
     
     filename = 'real.txt'
     exists = os.path.isfile(filename)
@@ -158,9 +172,10 @@ def run_samples(p1_fn, p2_fn, cmds):
         if len(data) > 0:
             print('Running: {}'.format(fname))
             res1 = p1_fn(data) if part1 else "Skipping"
+            print("Sample part 1: {}".format(res1))
             res2 = p2_fn(data) if part2 else 'Skipping'
         
-            print("Sample part 1: {}".format(res1))
+            
             print("Sample part 2: {}".format(res2))
             print('##############################')
 
@@ -172,10 +187,11 @@ def run(YEAR, DAY, p1_fn, p2_fn, cmds = {}):
     print('Running real input')
     
     res1 = p1_fn(v) if part1 else "Skipping"
+    print('part_1: {}'.format(res1))
     res2 = p2_fn(v) if part2 else 'Skipping'
         
 
-    print('part_1: {}'.format(res1))
+ 
     print('part_2: {}'.format(res2))
         
 

@@ -4,44 +4,19 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
-#import drawgraph #only works in python3
+#import drawgraph
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
 import re
-#import numpy as np
 #use regex re.split(' |,|: ', line)
 
 def db(*a): 
     if DB: print(*a)
 
 def parse(line):
-    return lazy_ints(multisplit(line, ',', 'x'))
+    line = removeall(line, 'Disc #', 'has', 'positions; at time=0, it is at position ', '.')
+    return lazy_ints(line.split())
 
-def parse2(line):
-    return lazy_ints(multisplit(line, ','))
-
-def p1(v):
-    lines = v.strip().split('\n')
-    chunks = v.strip().split('\n\n')
-    cnt = 0
-    earliest = int(lines[0])
-    data = parse(lines[1])
-    db(data)
-    best = 10 ** 10, 0
-    for bus in data:
-        k = earliest // bus
-        nxt = (k+1) * bus
-        best =  min((nxt, bus) ,best)
-    
-    left =best[0] - earliest
-    db(best, left)
-    return best[1] * left
-
-def mult(data):
-    p = 1
-    for v in data:
-        p *= v
-    return p
 def gcd(a, b):return gcd(b, a % b) if b else a
 
 # x * a + y * b = gcd(a, b). Return gcd(a, b), x, y
@@ -74,17 +49,21 @@ def crt(la, ln):
         x += a*Mi*lN[i]
     return x % prod
 
-def p2(v):
+def p1(v):
     lines = v.strip().split('\n')
-    vals = parse2(lines[1])
-    N = []
-    A = []
-    for i, v in enumerate(vals):
-        if v != 'x':
-            N.append(v)
-            A.append(-i % v)
-    return crt(A, N)    
     
+    vals = [parse(line) for line in lines]
+    la = []
+    ln = []
+    for ai, ni, si in vals:
+        la.append(-(ai + si)%ni)
+        ln.append(ni)
+
+    return crt(la, ln)
+
+def p2(v):
+    return p1(v)
+
 
 def manual():
     v = open("real.txt", 'r').read().strip('\n')
@@ -92,6 +71,6 @@ def manual():
         
 cmds, stats, io, so, DB = get_args(sys.argv)    
 if not io: run_samples(p1, p2, cmds)
-if not so: run(2020,13, p1, p2, cmds)
+if not so: run(2016,15, p1, p2, cmds)
 if stats: print_stats()
 #manual()

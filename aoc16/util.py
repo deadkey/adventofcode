@@ -5,7 +5,14 @@ from datetime import datetime
 import bs4
 import logging as log
 import re
+
+
 from itertools import chain, combinations
+
+def powerset(iterable):
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
 
 def isint(i):
     try:
@@ -14,15 +21,11 @@ def isint(i):
     except:
         return False
 
+
 def removeall(s, *arg):
     for a in arg:
         s = s.replace(a, '')
     return s
-
-
-def powerset(iterable):
-    s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
 
 
 def int_convert(s):
@@ -75,18 +78,30 @@ def printgrid(grid):
         out = ''.join(map(str, grid[r]))
         print(out)
 
-
-
 def multisplit(s, *schars):
-    reg = '|'.join(schars)
-    out =  re.split(reg, s)
-    out = filter(lambda x: len(x)> 0, out)
-    return list(map(lambda x: x.strip(), out))
+    out = [s]
+    for delim in schars:
+        newout = []
+        for word in out:
+            spl = word.split(delim)
+            newout.extend(spl)
+        out = newout
+    #reg = '|'.join(schars)
+    #out =  re.split(reg, s)
+    out = list(map(lambda x: x.strip(), out))
+    out = filter(lambda x: len(x.strip())> 0, out)
 
+    return out
+
+def chunks(v):
+    return v.strip().split('\n\n')
 
 
 def lazy_ints(li):
-    return list(map(int_convert, li)) 
+    li = list(map(int_convert, li)) 
+    if len(li) == 1:
+        return li[0]
+    return li
 
 def print_stats():
 
