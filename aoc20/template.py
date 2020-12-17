@@ -21,10 +21,8 @@ def parse(line):
 
 def p1(v):
     lines = v.strip().split('\n')
-    chunks = v.strip().split('\n\n')
-    cnt = 0
     data = [parse(line) for line in lines]
-    return cnt
+    return 0
 
 def p2(v):
     return p1(v)
