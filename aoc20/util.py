@@ -103,6 +103,17 @@ def lazy_ints(li):
         return li[0]
     return li
 
+def mul(li):
+    p = 1
+    for v in li:
+        p *= v
+    return p
+
+def add(li):
+    ints = filter(lambda x: isint(x), li)
+    return sum(ints)
+
+
 def print_stats():
 
     v = open("real.txt", 'r').read().strip('\n')
