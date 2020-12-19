@@ -56,6 +56,14 @@ def emptygrid(R, C, val):
 def cntgrid(grid, val):
     return sum(grid[r].count(val) for r in range(len(grid)))
 
+def findpos(grid, val):
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
+            if grid[r][c] == val:
+                return r, c
+    return None
+
+
 
 def get4nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
     diff = [(-1, 0), (1, 0), (0, 1), (0, -1)]
