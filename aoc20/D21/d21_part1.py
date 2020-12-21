@@ -91,62 +91,10 @@ def p1(v):
     for f in foods.keys():
         if f not in used:
             mx += foods[f]
-    db(len(used))
     return mx
 
 def p2(v):
-    lines = v.strip().split('\n')
-    data = [parse(line) for line in lines]
-    all2food = dd(list)
-    alls = set()
-    foods = Counter()
-    for ing, all in data:
-        alls |= set(all)
-        for a in all:
-            all2food[a].append(ing)
-        for f in ing:
-            foods[f] += 1
-    used = set()
-    possible = {}
-    for a in alls:
-        inall = set(all2food[a][0])
-        for li in all2food[a]:
-            inall &= set(li)
-        used |= inall
-        possible[a] = list(inall)
-    mx = 0
-    db(foods)
-    db(used)
-    for f in foods.keys():
-        if f not in used:
-            mx += foods[f]
-    
-    db(possible)
-    db('ALL', alls)
-    #match
-    match = {}
-    steps = 0
-    while len(match) < len(alls):
-        for a in alls:
-            db(a)
-            if a not in match:
-                #db('not in match', len(possible[a]))
-                if len(possible[a]) == 1:
-                    
-                    f = possible[a][0]
-                    #db('matching ', a, f)
-                    match[a] = f
-                    for oa in alls:
-                        if f in possible[oa]:
-                            possible[oa].remove(f)
-        db(len(match))
-        
-    db(match)
-    li = sorted(match.items())
-    fl = [x[1] for x in li]
-
-
-    return ','.join(fl)
+    return p1(v)
 
 
 def manual():
