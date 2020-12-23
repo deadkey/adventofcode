@@ -96,7 +96,7 @@ def merge(li):
     return out
 
 
-def p1(v, N = 5):
+def p1(v):
     # Failed 115, too low
     start_str = open("start.txt", 'r').read().strip('\n').split('\n')
     grid = togrid(start_str)
@@ -111,7 +111,7 @@ def p1(v, N = 5):
             rules[alt] = right
     #db(rules)
     #db('Len of rules', len(rules))
-    
+    N = 5
     for _ in range(N):
         S = len(grid)
         if S % 2 == 0:
@@ -144,7 +144,7 @@ def p1(v, N = 5):
     return cnt
 
 def p2(v):
-    return p1(v, N = 18)
+    return p1(v)
 
 
 def manual():
