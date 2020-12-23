@@ -16,8 +16,8 @@ def powerset(iterable):
 
 def isint(i):
     try:
-        int(i)
-        return True
+        ii = int(i)
+        return ii == float(i)
     except:
         return False
 
@@ -27,6 +27,11 @@ def removeall(s, *arg):
         s = s.replace(a, '')
     return s
 
+def replaceall(s, *arg):
+    new = arg[-1]
+    for a in arg[0:-1]:
+        s = s.replace(a, new)
+    return s
 
 def int_convert(s):
     if isint(s):
