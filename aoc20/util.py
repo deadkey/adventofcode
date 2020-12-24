@@ -36,7 +36,7 @@ def int_convert(s):
 INF = 10**30
 def togrid(lines): 
     grid = [list(line) for line in lines]
-    return grid, len(grid), len(grid[0])
+    return grid
 
 def tointgrid(lines): 
     grid = [list(map(int, line.split())) for line in lines]
