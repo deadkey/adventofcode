@@ -22,14 +22,26 @@ def parse(line):
 def p1(v):
     lines = v.strip().split('\n')
     data = [parse(line) for line in lines]
+    x, y = 0, 0
+    for i in range(len(data)):
+        a, b = data[i]
+        if a == 'forward':
+            x += b
+        elif a == 'down':
+            y += b
+        elif a == 'up':
+            y -= b
+
+    return x * y
+
+def p2(v):
+    lines = v.strip().split('\n')
+    data = [parse(line) for line in lines]
     su = 0
     for i in range(len(data)):
         v = data[i]
 
     return su
-
-def p2(v):
-    return p1(v)
 
 
 def manual():
@@ -38,6 +50,6 @@ def manual():
         
 cmds, stats, io, so, DB = get_args(sys.argv)    
 if not io: run_samples(p1, p2, cmds)
-if not so: run(get_year(),  get_day(), p1, p2, cmds)
+if not so: run(2021,2, p1, p2, cmds)
 if stats: print_stats()
 #manual()
