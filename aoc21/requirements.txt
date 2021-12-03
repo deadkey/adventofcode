@@ -1,1 +1,1 @@
-requests bs4 progressbar
+requests bs4 progressbar2
