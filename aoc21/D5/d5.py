@@ -24,7 +24,7 @@ def draw1(x1, y1, x2, y2, grid):
         y1, y2 = min(y1, y2), max(y1, y2)
         for x in range(x1, x2 + 1):
             for y in range(y1, y2 + 1):
-                grid[y, x] += 1
+                grid[x, y] += 1
 
 
 def draw(x1, y1, x2, y2, grid):
@@ -33,13 +33,13 @@ def draw(x1, y1, x2, y2, grid):
         y1, y2 = min(y1, y2), max(y1, y2)
         for x in range(x1, x2 + 1):
             for y in range(y1, y2 + 1):
-                grid[y, x] += 1
+                grid[x, y] += 1
     elif abs(x1 - x2) == abs(y1 -y2):
         dx = 1 if x2 > x1 else -1
         dy = 1 if y2 > y1 else -1
         x, y = x1, y1
         while (x, y) != (x2, y2):
-            grid[y, x] += 1
+            grid[x, y] += 1
             x += dx
             y += dy
         grid[y, x] += 1
@@ -74,7 +74,6 @@ def p2(v):
     for k, v in grid.items():
         if v >= 2:
             cnt += 1
-
 
     return cnt
 
