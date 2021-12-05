@@ -42,7 +42,7 @@ def draw(x1, y1, x2, y2, grid):
             grid[x, y] += 1
             x += dx
             y += dy
-        grid[y, x] += 1
+        grid[x, y] += 1
 
 
 def p1(v):
