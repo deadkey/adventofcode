@@ -19,7 +19,7 @@ def parse(line):
     return lazy_ints(list(line.split()[0]))
 
 
-def bfs(q, g, seen, R, C):
+def bfs(q, g, R, C):
     visited = set()
 
     for node in q:
@@ -30,7 +30,7 @@ def bfs(q, g, seen, R, C):
             row, col = node
             nb = get4nb(row, col, 0, R, 0, C)
             for r, c in nb:
-                if (r, c) not in visited and (r, c) not in seen and g[r][c] < 9:
+                if (r, c) not in visited and g[r][c] < 9:
 
                     visited.add((r, c))
                     q2.append((r, c))
@@ -76,11 +76,11 @@ def p2(v):
                 lowpoints.append((data[row][col], row, col))
     
     vislen = []
-    seen = set()
+    #seen = set()
     lowpoints.sort()
     for low in lowpoints:
-        vis = bfs([(low[1], low[2])], data, seen, R, C)
-        seen = seen | vis
+        vis = bfs([(low[1], low[2])], data, R, C)
+        #seen = seen | vis
         vislen.append(len(vis))
     vislen.sort(reverse = True)
     return vislen[0] * vislen[1] * vislen[2]
