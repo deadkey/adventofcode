@@ -63,9 +63,33 @@ def get4nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
     for dr, dc in diff:
         if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
             nb.append((r+dr, c + dc))
+    return nb 
+
+def grid4nb(r, c, grid):
+    rmin = 0
+    cmin = 0
+    rmax = len(grid)
+    cmax = len(grid[0])
+    diff = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+    nb = []
+    for dr, dc in diff:
+        if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
+            nb.append((r+dr, c + dc))
     return nb     
 
 def get8nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
+    diff = [(-1, 0), (1, 0), (0, 1), (0, -1), (-1, -1), (1, -1), (-1, 1), (1, 1)]
+    nb = []
+    for dr, dc in diff:
+        if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
+            nb.append((r+dr, c + dc))
+    return nb     
+
+def grid8nb(r, c, grid):
+    rmin = 0
+    cmin = 0
+    rmax = len(grid)
+    cmax = len(grid[0])
     diff = [(-1, 0), (1, 0), (0, 1), (0, -1), (-1, -1), (1, -1), (-1, 1), (1, 1)]
     nb = []
     for dr, dc in diff:
@@ -77,6 +101,22 @@ def printgrid(grid):
     for r in range(len(grid)):
         out = ''.join(map(str, grid[r]))
         print(out)
+
+def printdict(grid):
+    INF = 10**12
+    minx = min(grid.keys())[0]
+    maxx = max(grid.keys())[0]
+    
+    miny = min(grid.keys(), key = lambda x: x[1])[1]
+    maxy = max(grid.keys(), key = lambda x: x[1])[1]
+    print(minx, miny, maxx, maxy)
+    for y in range(miny, maxy + 1):
+        out = []
+        for x in range(minx, maxx + 1):   
+            out.append(str(grid[x, y])) 
+        print(''.join(out))
+
+
 
 def multisplit(s, *schars):
     out = [s]
