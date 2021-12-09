@@ -28,10 +28,9 @@ def bfs(q, g, R, C):
         q2 = []
         for node in q:
             row, col = node
-            nb = get4nb(row, col, 0, R, 0, C)
+            nb = grid4nb(row, col, g)
             for r, c in nb:
                 if (r, c) not in visited and g[r][c] < 9:
-
                     visited.add((r, c))
                     q2.append((r, c))
         q = q2
@@ -46,7 +45,7 @@ def p1(v):
     for row in range(len(data)):
         rowdata = data[row]
         for col in range(len(rowdata)):
-            nb = get4nb(row, col, 0, R, 0, C)
+            nb = grid4nb(row, col, data)
             vals = []
             for r, c in nb:
                 vals.append(data[r][c])
