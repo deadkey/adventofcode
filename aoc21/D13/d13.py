@@ -21,8 +21,9 @@ def parse(line):
 def solve(grid, folds, N):
     for coord, val in folds[0:N]:
         nxt = dd(int)
-        for (x, y), k in grid.items():
-            if k == 0: continue
+        db('Keys', len(grid.keys()))
+        for (x, y) in grid.keys():
+            #if k == 0: continue
             if coord == 'x':
                 if x < val:
                     nxt[x, y]= 1
@@ -37,8 +38,8 @@ def solve(grid, folds, N):
                     diff = y - val
                     y = val - diff
                     nxt[x, y] = 1
-            grid = nxt
-    printdict(grid)
+        grid = nxt
+    
     return sum(grid.values())
 
 def p1(v):
