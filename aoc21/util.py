@@ -83,7 +83,8 @@ def get8nb(r, c, rmin = -INF, rmax = INF, cmin = -INF, cmax = INF):
     for dr, dc in diff:
         if rmin <= r + dr < rmax and cmin <= c + dc < cmax:
             nb.append((r+dr, c + dc))
-    return nb     
+    return nb  
+
 
 def grid8nb(r, c, grid):
     rmin = 0
@@ -109,11 +110,12 @@ def printdict(grid):
     
     miny = min(grid.keys(), key = lambda x: x[1])[1]
     maxy = max(grid.keys(), key = lambda x: x[1])[1]
-    print(minx, miny, maxx, maxy)
+   
     for y in range(miny, maxy + 1):
         out = []
         for x in range(minx, maxx + 1):   
-            out.append(str(grid[x, y])) 
+            p = '#' if grid[x, y] == 1 else ' '
+            out.append(p) 
         print(''.join(out))
 
 

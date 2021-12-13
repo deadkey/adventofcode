@@ -72,6 +72,9 @@ def p2(v):
     
     for i in range(N):
         res = sim(data)
+
+
+        
         su += res
         if res == 100:
             return i+1
