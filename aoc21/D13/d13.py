@@ -21,7 +21,6 @@ def parse(line):
 def solve(grid, folds, N):
     for coord, val in folds[0:N]:
         nxt = dd(int)
-        db('Keys', len(grid.keys()))
         for (x, y) in grid.keys():
             #if k == 0: continue
             if coord == 'x':
