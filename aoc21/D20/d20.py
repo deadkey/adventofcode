@@ -54,7 +54,7 @@ def p1(v):
    
     imgorig = togrid(chunks[1].split('\n'))
     img = dd(int)
-    
+        
     
     for r in range(len(imgorig)):
         for c in range(len(imgorig[0])):
@@ -67,6 +67,7 @@ def p1(v):
             nxt = dd(lambda: 1)
         else:
             nxt = dd(lambda: 0)
+
         toinc = set(img.keys())
         L = len(toinc)
         for (r, c), v in list(img.items()):

@@ -103,7 +103,7 @@ def printgrid(grid):
         out = ''.join(map(str, grid[r]))
         print(out)
 
-def printdict(grid):
+def printdictxy(grid):
     INF = 10**12
     minx = min(grid.keys())[0]
     maxx = max(grid.keys())[0]
@@ -118,7 +118,20 @@ def printdict(grid):
             out.append(p) 
         print(''.join(out))
 
-
+def printdictrc(grid):
+    INF = 10**12
+    minx = min(grid.keys())[0]
+    maxx = max(grid.keys())[0]
+    
+    miny = min(grid.keys(), key = lambda x: x[1])[1]
+    maxy = max(grid.keys(), key = lambda x: x[1])[1]
+   
+    for x in range(minx, maxx + 1):
+        out = []
+        for y in range(miny, maxy + 1):   
+            p = '#' if grid[x, y] == 1 else ' '
+            out.append(p) 
+        print(''.join(out))
 
 def multisplit(s, *schars):
     out = [s]
