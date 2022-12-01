@@ -148,8 +148,12 @@ def multisplit(s, *schars):
 
     return out
 
-def chunks(v):
-    return v.strip().split('\n\n')
+def tochunks(v):
+    ch = v.strip().split('\n\n')
+    lines = []
+    for c in ch:
+        lines.append(c.split('\n'))
+    return lines
 
 
 def lazy_ints(li):
