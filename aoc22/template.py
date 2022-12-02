@@ -23,7 +23,9 @@ import re
 def db(*a): 
     if DB: print(*a)
 
+#crazy input, use multisplit? 
 def parse(line):
+    #return lazy_ints(multisplit(line, '')) 
     return lazy_ints(line.split())
     
 

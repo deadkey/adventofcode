@@ -72,9 +72,9 @@ def get_args(argv):
             DB = 1 #debugprints
         if arg == 'st' or arg == 'stat' or arg == 'stats':
             stats = 1 #print stats
-        if arg == 'p1' or arg == 'part1':
+        if arg == 'p1' or arg == 'part1' or arg == '1':
             cmds.append('p1') #run part one
-        if arg == 'p2' or arg == 'part2':
+        if arg == 'p2' or arg == 'part2' or arg == '2':
             cmds.append('p2') #run part 2
         if arg == 's' or  arg == 'submit':
             cmds.append("submit") #submit
