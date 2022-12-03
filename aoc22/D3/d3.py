@@ -33,6 +33,12 @@ def inall(ch, allset):
         if ch not in s: return False
     return True
 
+def prio(ch):
+    if ch.islower():
+        return ord(ch) - ord('a') + 1
+    else:
+        return ord(ch) - ord('A') + 27
+
 def p1(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
@@ -43,25 +49,31 @@ def p1(v):
         k = len(d)//2
         first = set(d[0:k])
         second = set(d[k:])
-       
-        for ch in first:
-            prio = 0
-            if ch in second:
-                db(ch)
-                if ch.islower():
-                    db('lower')
-                    prio += ord(ch) - ord('a') + 1
-                    db(prio)
-                else:
-                    prio += ord(ch) - ord('A') + 27
-            su += prio
+        common = first & second
+        
+        su += sum([prio(ch) for ch in common])
 
 
     return su
 
 
 def p2(v):
-    return p1(v)
+    lines = v.strip().split('\n')
+    chunks = tochunks(v)
+    data = [parse(line) for line in lines]
+    su = 0
+    for i in range(0, len(data), 3):
+        first = set(data[i])
+        second = set(data[i+1])
+        third = set(data[i + 2])
+        common = first & second & third
+        
+        su += sum([prio(ch) for ch in common])
+
+
+    return su
+
+
 
 
 def manual():
