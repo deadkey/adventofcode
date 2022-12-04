@@ -133,7 +133,7 @@ def printdictrc(grid):
             out.append(p) 
         print(''.join(out))
 
-def multisplit(s, *schars):
+def multisplit(s, schars):
     out = [s]
     for delim in schars:
         newout = []
