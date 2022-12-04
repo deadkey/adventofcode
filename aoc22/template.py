@@ -25,8 +25,8 @@ def db(*a):
 
 #crazy input, use multisplit? 
 def parse(line):
-    #return lazy_ints(multisplit(line, '')) 
-    return lazy_ints(line.split())
+    #return lazy_ints(line.split())
+    return lazy_ints(multisplit(line, ' ')) 
     
 
 def p1(v):
