@@ -25,8 +25,7 @@ def db(*a):
 
 #crazy input, use multisplit? 
 def parse(line):
-    return lazy_ints(multisplit(line, ',-')) 
-    #return lazy_ints(line.split(','))
+    return lazy_ints(multisplit(line, ' ')) 
     
 
 def p1(v):
@@ -47,7 +46,7 @@ def p2(v):
     su = 0
     for i in range(len(data)):
         a1, a2, b1, b2 = data[i]
-        if (a1 <= b1 <= a2) or (b1 <= a1 <= b2): su += 1
+        if (a1 <= b1 <= a2) or (b1 <= a2 <= b2): su += 1
 
     return su
 
