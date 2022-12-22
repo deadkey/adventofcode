@@ -149,7 +149,7 @@ def multisplit(s, schars):
     return out
 
 def tochunks(v):
-    ch = v.strip().split('\n\n')
+    ch = v.split('\n\n')
     lines = []
     for c in ch:
         lines.append(c.split('\n'))
