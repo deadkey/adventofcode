@@ -27,19 +27,37 @@ def db(*a):
 def parse(line):
     return lazy_ints(multisplit(line, ' ')) 
     
+def wins(t, d):
+    cnt = 0
+    for speed in range(t+1):
+        left = t - speed
+        dist = left * speed
+        if dist > d:cnt += 1
+    return cnt
 
 def p1(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
     data = [parse(line) for line in lines]
-    su = 0
-    for i in range(len(data)):
-        d = data[i]
+    su = 1
+    times = data[0][1:]
+    dist = data[1][1:]
+    
+    for t, d in zip(times, dist):
+        ways = wins(t, d)
+        su *= ways
 
     return su
 
 def p2(v):
-    return p1(v)
+    lines = v.strip().split('\n')
+    data = [parse(line) for line in lines]
+    su = 1
+    times = data[0][1:]
+    dist = data[1][1:]
+    time = int(merge(times))
+    dist = int(merge(dist))
+    return wins(time, dist)
 
 
 def manual():
@@ -53,7 +71,7 @@ if 'manual' in cmds:
     manual()
     exit()
 
-if not so: run(get_year(),  get_day(), p1, p2, cmds)
+if not so: run(2023,6, p1, p2, cmds)
 if stats: print_stats()
 
 #manual()

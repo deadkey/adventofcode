@@ -21,6 +21,8 @@ def isint(i):
     except:
         return False
 
+def merge(li, sep = ''):
+    return sep.join(map(str, li))
 
 def removeall(s, *arg):
     for a in arg:

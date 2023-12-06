@@ -134,11 +134,11 @@ def answer(year, day, level, res):
         print('Submitting {}'.format(res))
         text = submit(year, day, level, res)
         if "That's the right answer!" in text:
-            print('AC!')
+            print('\n\n\nAC!')
             if level == 1: copyfile('d{}.py'.format(day), 'd{}_part1.py'.format(day))
 
         else:
-            print('WRONG!')
+            print('\n\n\nWRONG!')
         print('>> ' + text)
         return text
     else:
