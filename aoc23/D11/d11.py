@@ -53,24 +53,56 @@ def getcols(grid):
             empty.add(c)
     return empty
 
-def offscols(a, b, cols):
+
+
+def offscols(a, b, cols, ADD = 1):
     start = min(a[1], b[1])
     end = max(a[1], b[1])
     d = end- start
     for c in range(start, end + 1):
         if c in cols:
-            d += 1000000-1
+            d += ADD
     return d
 
-def offsrows(a, b, rows):
+def offsrows(a, b, rows, ADD = 1):
     start = min(a[0], b[0])
     end = max(a[0], b[0])
     d = end- start
     for c in range(start, end + 1):
         if c in rows:
-            d += 1000000-1
+            d += ADD
     return d
 
+
+def p2(v):
+    lines = v.strip().split('\n')
+    chunks = tochunks(v)
+    data = [parse(line) for line in lines]
+    grid = togrid(lines)
+   
+    rows = getrows(grid)
+    cols = getcols(grid)
+    gals = []
+    db(rows)
+    db(cols)
+    
+    su = 0
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
+            if grid[r][c] == '#':
+                gals.append((r, c))
+    for i in range(len(gals)):
+        for k in range(i+1, len(gals)):
+            d = offscols(gals[i], gals[k], cols, ADD = 1000000-1)
+            db('dist cols', d)
+            d2 = offsrows(gals[i], gals[k], rows, ADD = 1000000-1)
+            d += d2
+            db('dist rows', d2)
+            db('from ', gals[i], 'to', gals[k], 'd', d)
+            su += d
+        
+
+    return su
 
 def p1(v):
     lines = v.strip().split('\n')
@@ -102,8 +134,6 @@ def p1(v):
 
     return su
 
-def p2(v):
-    return p1(v)
 
 
 def manual():
