@@ -27,14 +27,14 @@ def db(*a):
 def parse(line):
     return lazy_ints(multisplit(line, ' ,')) 
 
-def cnt(li):
+def cnt(li, part2 = False):
     
     sp = li[0]
     arr = li[1:]
-    
-    sp = '?'.join([sp] *5)
-    db(sp)
-    arr = arr * 5
+    if part2:
+        sp = '?'.join([sp] *5)
+        db(sp)
+        arr = arr * 5
 
     ################
     DP = {}
@@ -87,6 +87,19 @@ def cnt(li):
 
     return dp(0, 0)
 
+def p2(v):
+    lines = v.strip().split('\n')
+    chunks = tochunks(v)
+    data = [parse(line) for line in lines]
+    su = 0
+
+    for i in range(len(data)):
+        d = data[i]
+        a = cnt(d, part2 = True)
+        su += a
+
+    return su
+
 def p1(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
@@ -99,9 +112,6 @@ def p1(v):
         su += a
 
     return su
-
-def p2(v):
-    return p1(v)
 
 
 def manual():
