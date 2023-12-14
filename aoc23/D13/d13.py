@@ -99,7 +99,7 @@ def cnt(grid):
 
 
 
-def p1(v):
+def p2(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
     su = 0
@@ -110,8 +110,72 @@ def p1(v):
 
     return su
 
-def p2(v):
-    return p1(v)
+###################################
+# Part 1
+
+def sameC1(grid, c1, c2):
+    col1 = []
+    col2 = []
+    R = len(grid)
+    for r in range(R):
+        col1.append(grid[r][c1])
+        col2.append(grid[r][c2])
+        #if grid[r][c1] != grid[r][c2]:
+        #    return False
+    #return True
+    #db('testing', col1, col2)
+    return col1 == col2
+
+
+def sameR1(grid, r1, r2):
+    row1 = grid[r1]
+    row2 = grid[r2]
+    return row1 == row2
+
+def midC1(grid, mid):
+
+    R = len(grid)
+    C = len(grid[0])
+    L = min(mid+1, C-mid-1)
+    
+    for d in range(L):
+        if not sameC1(grid, mid-d, mid + d+1):
+            return False
+    return True
+
+
+def midR1(grid, mid):
+
+    R = len(grid)
+    L = min(mid+1, R-mid -1)
+    for d in range(L):
+        if not sameR1(grid, mid-d, mid + d+1):
+            return False
+    return True
+
+def cnt1(grid):
+    R = len(grid)
+    C = len(grid[0])
+    for c in range(C-1):
+        if midC1(grid, c):
+            return c + 1
+    
+    for r in range(R-1):
+        if midR1(grid, r):
+            return 100 * (r + 1)
+    assert False
+    
+
+def p1(v):
+    lines = v.strip().split('\n')
+    chunks = tochunks(v)
+    su = 0
+    for ch in chunks:
+        grid = togrid(ch)
+        db(cnt1(grid))
+        su += cnt1(grid)
+
+    return su
 
 
 def manual():
