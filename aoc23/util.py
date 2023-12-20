@@ -24,9 +24,9 @@ def isint(i):
 def merge(li, sep = ''):
     return sep.join(map(str, li))
 
-def removeall(s, *arg):
+def removeall(s, arg):
     for a in arg:
-        s = s.replace(a, '')
+        s = s.replace(a, ' ')
     return s
 
 
