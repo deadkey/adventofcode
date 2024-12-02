@@ -26,20 +26,53 @@ def db(*a):
 #crazy input, use multisplit? 
 def parse(line):
     return lazy_ints(multisplit(line, ' ')) 
+
+def isinc(li):
+    prev = li[0]
     
+    for n in li[1:]:
+        if 1<= n - prev <= 3: 
+            pass
+        else:
+            return False    
+        prev = n
+    return True
+
+def isdec(li):
+    prev = li[0]
+    
+    for n in li[1:]:
+        if 1<= prev - n <= 3: 
+            pass
+        else:
+            return False    
+        prev = n
+    return True
+
+
+def safe(li):
+    for i in range(len(li)):
+        li2 = li[:i] + li[i+1:]
+
+        if isinc(li2): return True
+        if isdec(li2): return True
+    return False
 
 def p1(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
     data = [parse(line) for line in lines]
-    su = 101
+    su = 0
     for i in range(len(data)):
         d = data[i]
+        if safe(d): su += 1
+        
 
     return su
 
 def p2(v):
     return p1(v)
+
 
 def manual():
     v = open("real.txt", 'r').read().strip('\n')
@@ -52,7 +85,7 @@ if 'manual' in cmds:
     manual()
     exit()
 
-if not so: run(2023,1, p1, p2, cmds)
+if not so: run(2024,2, p1, p2, cmds)
 if stats: print_stats()
 
 #manual()
