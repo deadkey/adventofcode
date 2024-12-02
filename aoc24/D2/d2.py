@@ -51,6 +51,11 @@ def isdec(li):
 
 
 def safe(li):
+    if isinc(li): return True
+    if isdec(li): return True
+    return False
+
+def safe2(li):
     for i in range(len(li)):
         li2 = li[:i] + li[i+1:]
 
@@ -71,7 +76,16 @@ def p1(v):
     return su
 
 def p2(v):
-    return p1(v)
+    lines = v.strip().split('\n')
+    chunks = tochunks(v)
+    data = [parse(line) for line in lines]
+    su = 0
+    for i in range(len(data)):
+        d = data[i]
+        if safe2(d): su += 1
+        
+
+    return su
 
 
 def manual():
