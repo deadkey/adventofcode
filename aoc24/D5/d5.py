@@ -77,11 +77,9 @@ def p1(v):
         
     su = 0
     for up in chunks[1]:
-        up = up.split(',')
-        nb = [int(x) for x in up]
+        nb = lazy_ints(up.split(','))
         mid = len(nb)//2
         if check(nb, rules):
-            
             su += nb[mid]
         su += 0
     return su
@@ -98,8 +96,7 @@ def p2(v):
         
     su = 0
     for i, up in enumerate(chunks[1]):
-        up = up.split(',')
-        nb = [int(x) for x in up]
+        nb = lazy_ints(up.split(','))
         mid = len(nb)//2
         changed, new = check2(nb, rules)
         if changed:
