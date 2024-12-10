@@ -1,1 +1,0 @@
-requests bs4 progressbar2 pyperclip
