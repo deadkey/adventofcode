@@ -40,6 +40,10 @@ def togrid(lines):
     grid = [list(line) for line in lines]
     return grid
 
+def togoneintrid(lines): 
+    grid = [[int(x) for x in list(line)] for line in lines]
+    return grid
+
 def tointgrid(lines): 
     grid = [list(map(int, line.split())) for line in lines]
     return grid, len(grid), len(grid[0])

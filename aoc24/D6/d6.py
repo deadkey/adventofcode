@@ -34,14 +34,6 @@ def turn(dir):
     if dir == (0, -1): return (-1, 0)
     return None
 
-def printgrid(grid, vis):
-    grid = copygrid(grid)
-    for r, c in vis:
-       grid[r][c] = 'X' 
-    for r in range(len(grid)):
-        out = ''.join(map(str, grid[r]))
-        print(out)
-
 def walk1(grid, start):
     R = len(grid)
     C = len(grid[0])
@@ -53,11 +45,11 @@ def walk1(grid, start):
     while 0 <= r < R and 0 <= c < C:
         vis.add((r, c))
         dr, dc = dir
-        nxtrr, nxtc = r + dr, c + dc
-        if not (0 <= nxtrr < R and 0 <= nxtc < C): 
+        nr, nc = r + dr, c + dc
+        if not (0 <= nr < R and 0 <= nc < C): 
             printgrid(grid, vis)
             return len(vis)
-        if grid[nxtrr][nxtc] == '.':
+        if grid[nr][nc] == '.':
             r += dr
             c += dc
         else:
