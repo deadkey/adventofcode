@@ -98,15 +98,10 @@ def p2(v):
     chunks = tochunks(v)
     data = [parse(line) for line in lines]
     grid = togrid(lines)
-    start = (0, 0)
-    end = (0, 0)
+    start = gridfind(grid, 'S')
+    end = gridfind(grid, 'E')
 
-    for r in range(len(grid)):
-        for c in range(len(grid[0])):
-            if grid[r][c] == 'S':
-                start = (r, c)
-            if grid[r][c] == 'E':
-                end = (r, c)
+
     grid[start[0]][start[1]] = '.'
     grid[end[0]][end[1]] = '.'
     dist, tot = dij(grid, start, end)
@@ -128,15 +123,9 @@ def p1(v):
     chunks = tochunks(v)
     data = [parse(line) for line in lines]
     grid = togrid(lines)
-    start = (0, 0)
-    end = (0, 0)
+    start = gridfind(grid, 'S')
+    end = gridfind(grid, 'E')
 
-    for r in range(len(grid)):
-        for c in range(len(grid[0])):
-            if grid[r][c] == 'S':
-                start = (r, c)
-            if grid[r][c] == 'E':
-                end = (r, c)
     grid[start[0]][start[1]] = '.'
     grid[end[0]][end[1]] = '.'
     _, nd = dij(grid, start, end)

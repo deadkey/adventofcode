@@ -109,6 +109,22 @@ def printgrid(grid):
         out = ''.join(map(str, grid[r]))
         print(out)
 
+def gridfind(grid, val):
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
+            if grid[r][c] == val:
+                return r, c
+    return -1, -1
+
+def gridfindall(grid, val):
+    all = []
+    for r in range(len(grid)):
+        for c in range(len(grid[0])):
+            if grid[r][c] == val:
+                all.append((r, c))
+    return all
+
+
 def printdictxy(grid):
     INF = 10**12
     minx = min(grid.keys())[0]
