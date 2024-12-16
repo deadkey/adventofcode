@@ -169,11 +169,7 @@ def p2(v):
     
     lines = chunks[1]
     moves = []
-    start = (0, 0)
-    for r in range(len(grid)):
-        for c in range(len(grid[0])):
-            if grid[r][c] == '@':
-                start = (r, c)
+    start = gridfind(grid, '@')
     grid[start[0]] [start[1]] = '.'
     for line in lines:
         moves.extend(list(line))
@@ -183,11 +179,9 @@ def p2(v):
     for i, s in enumerate(moves):
         pos, curr = step2(grid, s, curr)
        
-    
-    for r in range(len(grid)):
-        for c in range(len(grid[0])):
-            if grid[r][c] == '[':
-                su += 100 * r + c
+    blocks = gridfindall(grid, '[')
+    for r, c in blocks:
+        su += 100 * r + c
         
 
     return su
@@ -199,11 +193,8 @@ def p1(v):
     
     lines = chunks[1]
     moves = []
-    start = (0, 0)
-    for r in range(len(grid)):
-        for c in range(len(grid[0])):
-            if grid[r][c] == '@':
-                start = (r, c)
+    start = gridfind(grid, '@')
+
     grid[start[0]] [start[1]] = '.'
     for line in lines:
         moves.extend(list(line))
@@ -214,10 +205,9 @@ def p1(v):
         pos, curr = step(grid, s, curr)
         
     
-    for r in range(len(grid)):
-        for c in range(len(grid[0])):
-            if grid[r][c] == 'O':
-                su += 100 * r + c
+    blocks = gridfindall(grid, 'O')
+    for r, c in blocks:
+        su += 100 * r + c
         
 
     return su
