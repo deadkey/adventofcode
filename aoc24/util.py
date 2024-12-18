@@ -124,6 +124,23 @@ def gridfindall(grid, val):
                 all.append((r, c))
     return all
 
+#### TURNS ####
+# dir = {'^': (-1, 0), 'v': (1, 0), '<': (0, -1), '>': (0, 1)}
+# cw = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+# ccw = [(0, 1), (-1, 0), (0, -1), (1, 0)]
+def turnleft(dir):
+    ccw = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    for i in range(4):
+        if ccw[i] == dir:
+            return ccw[(i + 1) % 4]
+        
+def turnright(dir):
+    cw = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    for i in range(4):
+        if cw[i] == dir:
+            return cw[(i + 1) % 4]
+        
+
 
 def printdictxy(grid):
     INF = 10**12
