@@ -37,10 +37,9 @@ def ispossible(des, towels):
     return len(des) in ok
 
 def ispossible2(des, towels):
-    ok = Counter()
-    ok[0] += 1
+    ok = Counter([0])
     for start in range(len(des)):
-        if ok[start] == 0: continue
+        if start not in ok: continue
         for t in towels:
             if des[start:start + len(t)] == t:
                 ok[start + len(t)] += ok[start]
