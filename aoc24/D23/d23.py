@@ -39,21 +39,24 @@ def p1(v):
     nodes = set()
     su = 0
 
-    '''
+    
     # Very slow
     G=nx.Graph()
     
     
     for a, b in data:
         G.add_edge(a, b)
-    
-    comps = set()
+
+    triangles = set()
     for node in G.nodes:
-        cc = set([node]) | set(G.neighbors(node))
-        cliques = nx.algorithms.clique.enumerate_all_cliques(G.subgraph(cc))
-        for c in cliques:
-            if len(c) == 3:
-                comps.add(tuple(sorted(c)))
+        for n1, n2 in combinations(G.neighbors(node), 2):
+            if G.has_edge(n1, n2):
+                triangles.add(tuple(sorted([node, n1, n2])))
+
+    for t in triangles:
+        first = [x[0] for x in t]
+        if 't' in first:
+            su += 1
     '''
     
     for i in range(len(data)):
@@ -81,7 +84,7 @@ def p1(v):
             if 't' == x[0]:
                 ccc = 1
         su += ccc
-
+    '''
     
     return su
     
