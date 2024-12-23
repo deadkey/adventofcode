@@ -9,6 +9,7 @@ import math
 import networkx as nx
 import matplotlib.pyplot as plt
 from collections import defaultdict as dd, Counter
+from itertools import chain, combinations, permutations
 #import drawgraph #only works in python3
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))
@@ -40,7 +41,6 @@ def p1(v):
     su = 0
 
     
-    # Very slow
     G=nx.Graph()
     
     
@@ -57,34 +57,7 @@ def p1(v):
         first = [x[0] for x in t]
         if 't' in first:
             su += 1
-    '''
     
-    for i in range(len(data)):
-        a, b = data[i]
-        g[a].append(b)
-        g[b].append(a)
-        nodes.add(a)
-        nodes.add(b)
-    
-    comps = set()
-    for node in nodes:
-        li1 = g[node]
-        seen = set(li1)
-        for n in li1:
-            for n2 in g[n]:
-                if n2 != node and n2 in seen:
-                    key = sorted([node, n, n2])
-                    comps.add(tuple(key))
-    
-    
-    
-    for c in comps:
-        ccc = 0
-        for x in c:
-            if 't' == x[0]:
-                ccc = 1
-        su += ccc
-    '''
     
     return su
     

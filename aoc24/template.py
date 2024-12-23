@@ -7,6 +7,7 @@ from util import *
 from gridutil import *
 import math
 from collections import defaultdict as dd, Counter
+from itertools import chain, combinations, permutations
 #import drawgraph #only works in python3
 #lo, hi, lt, pw = lazy_ints(multisplit(line, '-: ')) #chars only!
 #or lo, hi, lt, pw = lazy_ints(multisplit(line, ['-',': ','))

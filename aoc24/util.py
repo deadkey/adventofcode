@@ -5,8 +5,6 @@ from datetime import datetime
 import bs4
 import logging as log
 import re
-
-
 from itertools import chain, combinations
 
 def powerset(iterable):
