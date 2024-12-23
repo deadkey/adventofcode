@@ -4,6 +4,7 @@ sys.path.extend(['..', '.'])
 from collections import *
 from fetch import *
 from util import *
+from gridutil import *
 import math
 from collections import defaultdict as dd, Counter
 #import drawgraph #only works in python3
@@ -47,7 +48,7 @@ def walk1(grid, start):
         dr, dc = dir
         nr, nc = r + dr, c + dc
         if not (0 <= nr < R and 0 <= nc < C): 
-            printgrid(grid, vis)
+            
             return len(vis)
         if grid[nr][nc] == '.':
             r += dr
