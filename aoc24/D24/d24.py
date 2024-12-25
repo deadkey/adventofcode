@@ -194,7 +194,7 @@ def test(start, conns, xs, ys, zs):
 
 
 
-def p1(v):
+def p2(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
     start = [parse(line) for line in chunks[0]]
@@ -239,8 +239,27 @@ def p1(v):
     #su = int(''.join(map(str, val)), 2)
 
 
-def p2(v):
-    return p1(v)
+def p1(v):
+    lines = v.strip().split('\n')
+    chunks = tochunks(v)
+    start = [parse(line) for line in chunks[0]]
+    db(start)
+    conns =  [parse2(line) for line in chunks[1]]
+
+    su = 0
+    inputs = dd(list)
+    ops = {}
+    outputs = dd(list)
+    for a, op, b, res in conns:
+        inputs[res]= [a, b]
+        ops[res] = op
+        outputs[a].append(res)
+        outputs[b].append(res)
+
+    val = sim(start, inputs, outputs, ops)
+    su = int(''.join(map(str, val)), 2)
+
+    return su
 
 
 def manual():
