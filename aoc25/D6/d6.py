@@ -28,37 +28,60 @@ def db(*a):
 #crazy input, use multisplit? 
 def parse(line):
     return lazy_ints(multisplit(line, ' ')) 
-    
+
+def mult(vals):
+    p = 1
+    for v in vals:
+        p *= v
+    return p   
 
 def p1(v):
     lines = v.strip().split('\n')
     chunks = tochunks(v)
-    grid = togrid(lines)
-    R, C = len(grid), len(grid[0])
+    rows = [parse(line) for line in lines]
     su = 0
-    matches = []
-
-    ne = get8nb(0, 2, rmin = 0, rmax = R, cmin = 0, cmax = C)
-    
-    for r in range(R):
-        for c in range(C):
-            cnt = 0
-            ne = get8nb(r, c, rmin = 0, rmax = R, cmin = 0, cmax = C)
-            for nr, nc in ne:
-                if grid[nr][nc] == '@':
-                    cnt += 1
-            if cnt < 4 and grid[r][c] == '@': 
-                su += 1
-                matches.append((r, c))
-
-    for mr, mc in matches:
-        grid[mr][mc] = 'X'
-    #printgrid(grid)  
-
+    for c in range(len(rows[0])):
+        op = rows[-1][c]
+        vals = []
+        for r in range(len(rows)-1):
+            vals.append(rows[r][c])
+        if op == '+': su += sum(vals)  
+        if op == '*': su += mult(vals)
     return su
 
+def apply(op, vals):
+
+    if op == '+': return sum(vals)  
+    if op == '*': return mult(vals)
+
 def p2(v):
-    return p1(v)
+    lines = v.split('\n')
+    rows = [list(line) for line in lines]
+    su = 0
+    grid = togrid(rows[0:-1])
+    ops = lines[-1].split()
+    R, C = len(grid), len(grid[0])
+    values = []
+    for col in range(C-1, -1, -1):
+        curr = 0
+        ws = 0
+        for row in range(R):
+            if grid[row][col] == ' ': ws += 1
+            else:
+                value = int(grid[row][col])
+                curr *= 10
+                curr += value
+        if ws == R:
+            op = ops.pop()
+            db('Apply', op, 'values', values)
+            su += apply(op, values)
+            values = []
+        else:
+            values.append(curr)
+
+    su += apply(ops.pop(), values)
+
+    return su
 
 
 def manual():
@@ -72,7 +95,7 @@ if 'manual' in cmds:
     manual()
     exit()
 
-if not so: run(2025,4, p1, p2, cmds)
+if not so: run(2025,6, p1, p2, cmds)
 if stats: print_stats()
 
 #manual()
